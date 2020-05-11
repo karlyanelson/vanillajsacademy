@@ -58,18 +58,28 @@
 	</form>
 
 	<script>
+		// Selectors
 		var showPassword = document.querySelector("#show-password");
-        var passWordInput = document.querySelector("#password");
+		var passWordInput = document.querySelector("#password");
 
-        if (showPassword && passWordInput) {
-        showPassword.addEventListener("click", function (event) {
-            if (showPassword.checked === true) {
-            passWordInput.type = "text";
-            } else {
-            passWordInput.type = "password";
-            }
-        });
-        }
+		// Methods
+		function togglePassword(event) {
+			if (!passWordInput) {
+				return; // if input doesn't exist, bail
+			}
+			// is the type checked? if so, set input to text
+			// if not, set the input to password
+			event.target.checked
+				? (passWordInput.type = "text")
+				: (passWordInput.type = "password");
+		}
+
+		// Events
+		// check that checkbox exists
+		// check for click on checkbox, then run function
+		if (showPassword) {
+			showPassword.addEventListener("click", togglePassword);
+		}
 	</script>
 </body>
 </html>
