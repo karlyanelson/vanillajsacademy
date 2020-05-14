@@ -1,15 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-	<title>Day 1: Password Visibility | Vanilla JS Academy</title>
+	<title>Password Visibility | Vanilla JS Academy</title>
+	<link rel="stylesheet" href="../style.css">
 
 	<style type="text/css">
-		body {
-			margin: 1em auto;
-			max-width: 40em;
-			width: 88%;
-		}
-
 		label {
 			display: block;
 			width: 100%;
@@ -28,34 +23,36 @@
 <body>
     <nav>
         <a href="/vanillajsacademy/">View All Projects</a>
-    </nav>
+	</nav>
+	
+	<main>
+		<h1>Project 1: Password Visibility</h1>
 
-	<h1>Password Visibility</h1>
-
-	<p>Enter your username and password to login.</p>
-
-	<form>
-		<div>
-			<label for="username">Username</label>
-			<input type="text" name="username" id="username">
-		</div>
-
-		<div>
-			<label for="password">Password</label>
-			<input type="password" name="password" id="password">
-		</div>
-
-		<div>
-			<label for="show-password">
-				<input type="checkbox" name="show-passwords" id="show-password">
-				Show password
-			</label>
-		</div>
-
-		<p>
-			<button type="submit">Log In</button>
-		</p>
-	</form>
+		<p>Enter your username and password to login.</p>
+	
+		<form>
+			<div>
+				<label for="username">Username</label>
+				<input type="text" name="username" id="username">
+			</div>
+	
+			<div>
+				<label for="password">Password</label>
+				<input type="password" name="password" id="password">
+			</div>
+	
+			<div>
+				<label for="show-password">
+					<input type="checkbox" name="show-passwords" id="show-password">
+					Show password
+				</label>
+			</div>
+	
+			<p>
+				<button type="submit">Log In</button>
+			</p>
+		</form>
+	</main>
 
 	<script>
 		// Selectors

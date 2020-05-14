@@ -1,63 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-	<title>Day 3: Toggling Multiple Password Fields | Vanilla JS Academy</title>
+	<title>Toggling Multiple Password Fields | Vanilla JS Academy</title>
+	<link rel="stylesheet" href="../style.css">
 
 	<style type="text/css">
-		body {
-		margin: 1rem auto;
-		max-width: 25rem;
-		width: 88%;
-		}
-
 		label {
-		display: block;
-		width: 100%;
+			display: block;
+			width: 100%;
 		}
 
 		input {
-		margin-bottom: 1rem;
-		}
-
-		.password {
-		width: 100%;
+			margin-bottom: 1rem;
 		}
 
 		[type="checkbox"] {
-		margin-bottom: 0;
-		margin-right: 0.25em;
+			margin-bottom: 0;
+			margin-right: 0.25em;
 		}
 	</style>
 </head>
 <body>
     <nav>
         <a href="/vanillajsacademy/">View All Projects</a>
-    </nav>
+	</nav>
+	<main>
+		<h1>Project 2: Toggling Multiple Password Fields</h1>
 
-	<h1>Password Visibility</h1>
-
-	<form>
-		<div>
-		<label for="current-password">Current Password</label>
-		<input class="password" type="password" name="current-password" id="current-password">
-		</div>
-
-		<div>
-		<label for="new-password">New Password</label>
-		<input class="password" type="password" name="new-password" id="new-password">
-		</div>
-
-		<div>
-		<label for="show-passwords">
-			<input type="checkbox" name="show-passwords" id="show-passwords">
-			Show passwords
-		</label>
-		</div>
-
-		<p>
-		<button type="submit">Change Passwords</button>
-		</p>
-	</form>
+		<form>
+			<div>
+			<label for="current-password">Current Password</label>
+			<input class="password" type="password" name="current-password" id="current-password">
+			</div>
+	
+			<div>
+			<label for="new-password">New Password</label>
+			<input class="password" type="password" name="new-password" id="new-password">
+			</div>
+	
+			<div>
+			<label for="show-passwords">
+				<input type="checkbox" name="show-passwords" id="show-passwords">
+				Show passwords
+			</label>
+			</div>
+	
+			<p>
+			<button type="submit">Change Passwords</button>
+			</p>
+		</form>
+	</main>
 
 	<script>
 		// Selectors
