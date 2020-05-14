@@ -1,12 +1,12 @@
 :root {
     --color-bg: #EAEAEA;
-    --color-txt: #151c21;
+    --color-txt: #1d1e22;
     --color-action: #0867b7;
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --color-bg: #151c21;
+        --color-bg: #1d1e22;
         --color-txt: #EAEAEA;
         --color-action: #00a0ff;
     }
