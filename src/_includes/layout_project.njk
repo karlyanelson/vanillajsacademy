@@ -1,13 +1,11 @@
 ---
 ---
-
 {% set css %}
 	{% include "style.css" %}
 {% endset %}
-
 <!DOCTYPE html>
-<html>
-	<head lang="en">
+<html lang="en">
+	<head>
 		<title>{{title}} | Vanilla JS Academy</title>
 		<style type="text/css">
 			{{ css | cssmin | safe }}
@@ -17,7 +15,6 @@
 		<nav>
 			<a href="/vanillajsacademy/">View All Projects</a>
 		</nav>
-		
 		{{ content | safe }}
 	</body>
 </html>
