@@ -1,11 +1,17 @@
+---
+---
 <!DOCTYPE html>
 <html>
     <head>
         <title>Vanilla JS Academy</title>
 
-        <link rel="stylesheet" href="style.css">
+        {% set css %}
+            {% include "styles/global.css" %}
+        {% endset %}
         
         <style type="text/css">
+            {{ css | cssmin | safe }}
+
             ol {
                 display: inline-block;
                 padding: 1rem 0;
@@ -22,10 +28,7 @@
             <h1>Vanilla Javascript Academy Projects</h1>
         </header>
         <main>
-            <ol>
-                <li><a href="/vanillajsacademy/project-1">Project 1: Toggle Password Visibility</a></li>
-                <li><a href="/vanillajsacademy/project-2">Project 2: Toggling Multiple Password Fields</a></li>
-            </ol>
+            {{ content | safe }}
         </main>
         <footer>
             <a href="https://github.com/karlyanelson/vanillajsacademy">View on Github</a>

@@ -1,0 +1,24 @@
+{
+  "name": "vanillajsacademy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karlyanelson/vanillajsacademy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/karlyanelson/vanillajsacademy/issues"
+  },
+  "homepage": "https://github.com/karlyanelson/vanillajsacademy#readme",
+  "devDependencies": {
+    "@11ty/eleventy": "^0.11.0",
+    "clean-css": "^4.2.3"
+  }
+}
