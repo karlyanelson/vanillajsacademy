@@ -7,7 +7,7 @@ module.exports = function(eleventyConfig) {
     //   "css" // css is not yet a recognized template extension in Eleventy
     // ]);
 
-    eleventyConfig.addPassthroughCopy({ "src/_redirects": "./_redirects" });
+    // eleventyConfig.addPassthroughCopy({ "src/_redirects": "./_redirects" });
 
     // https://www.11ty.dev/docs/quicktips/inline-css/
     eleventyConfig.addFilter("cssmin", function(code) { 
