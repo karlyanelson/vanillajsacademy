@@ -1,14 +1,12 @@
 ---
 ---
+{% set css %}
+    {% include "style.css" %}
+{% endset %}
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Vanilla JS Academy</title>
-
-        {% set css %}
-            {% include "styles/global.css" %}
-        {% endset %}
-        
+        <title>Vanilla JS Academy</title>        
         <style type="text/css">
             {{ css | cssmin | safe }}
 

@@ -1,5 +1,6 @@
 // docs: https://www.11ty.io/docs/config/
 const CleanCSS = require("clean-css");
+var sass = require("sass");
 
 
 module.exports = function(eleventyConfig) {

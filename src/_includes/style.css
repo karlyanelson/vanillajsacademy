@@ -56,3 +56,17 @@ footer {
     border-top: 1px solid lightgray;
     padding: 1.5rem 0;
 }
+
+label {
+    display: block;
+    width: 100%;
+}
+
+input {
+    margin-bottom: 1rem;
+}
+
+[type="checkbox"] {
+    margin-bottom: 0;
+    margin-right: 0.25em;
+}

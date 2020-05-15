@@ -2,24 +2,22 @@
 ---
 
 {% set css %}
-	{% include "styles/global.css" %}
+	{% include "style.css" %}
 {% endset %}
 
 <!DOCTYPE html>
 <html>
-<head lang="en">
-	<title>{{title}} | Vanilla JS Academy</title>
-
-	<style type="text/css">
-		{{ css | cssmin | safe }}
-		{{ styles | safe }}
-	</style>
-</head>
-<body>
-    <nav>
-        <a href="/vanillajsacademy/">View All Projects</a>
-	</nav>
-	
-	{{ content | safe }}
-</body>
+	<head lang="en">
+		<title>{{title}} | Vanilla JS Academy</title>
+		<style type="text/css">
+			{{ css | cssmin | safe }}
+		</style>
+	</head>
+	<body>
+		<nav>
+			<a href="/">View All Projects</a>
+		</nav>
+		
+		{{ content | safe }}
+	</body>
 </html>
