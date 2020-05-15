@@ -2,3 +2,4 @@
   from = "https://vanillajsacademy-karly.netlify.app"
   to = "https://karlynelson.com/vanillajsacademy"
   status = 301
+  force = true
