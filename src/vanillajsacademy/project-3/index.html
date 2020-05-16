@@ -1,0 +1,106 @@
+---
+layout: layout_project.njk
+title: 'Project 3: Toggling Passwords in Multiple Forms'
+tags: project
+---
+
+<main>
+    <h1>{{title}}</h1>
+
+    <h2>Change Username</h2>
+  
+    <p>Enter your username and password to change your username.</p>
+  
+    <form class="form-1">
+      <div>
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username">
+      </div>
+  
+      <div>
+        <label for="password">Password</label>
+        <input class="password" type="password" name="password" id="password">
+      </div>
+  
+      <div>
+        <label for="show-password">
+          <input type="checkbox" name="show-passwords" id="show-password">
+          Show password
+        </label>
+      </div>
+  
+      <p>
+        <button type="submit">Change Username</button>
+      </p>
+    </form>
+  
+    <h2>Change Password</h2>
+  
+    <p>Enter your current password and new password below.</p>
+  
+    <form class="form-2">
+      <div>
+        <label for="current-password">Current Password</label>
+        <input class="password" type="password" name="current-password" id="current-password">
+      </div>
+  
+      <div>
+        <label for="new-password">New Password</label>
+        <input class="password" type="password" name="new-password" id="new-password">
+      </div>
+  
+      <div>
+        <label for="show-passwords">
+          <input type="checkbox" name="show-passwords" id="show-passwords">
+          Show passwords
+        </label>
+      </div>
+  
+      <p>
+        <button type="submit">Change Passwords</button>
+      </p>
+    </form>
+  </main>
+
+  <script>
+    // Selectors
+    //// Form 1
+    var showPasswordsForm1 = document.querySelector(
+    ".form-1 input[type='checkbox']"
+    );
+    var passWordInputsForm1 = Array.prototype.slice.call(
+    document.querySelectorAll(".form-1 .password")
+    );
+
+    //// Form 2
+    var showPasswordsForm2 = document.querySelector(
+    ".form-2 input[type='checkbox']"
+    );
+    var passWordInputsForm2 = Array.prototype.slice.call(
+    document.querySelectorAll(".form-2 .password")
+    );
+
+    //// Init checkbox variable
+    let checkbox;
+
+    // Methods
+    function togglePassword(passwordInput) {
+    passwordInput.type = checkbox.checked ? "text" : "password";
+    }
+
+    function loopThroughFormInputs(event) {
+    if (event.target.matches(".form-1 input[type='checkbox']")) {
+        checkbox = showPasswordsForm1;
+        passWordInputsForm1.forEach(togglePassword);
+    }
+
+    if (event.target.matches(".form-2 input[type='checkbox']")) {
+        checkbox = showPasswordsForm2;
+        passWordInputsForm2.forEach(togglePassword);
+    }
+    }
+
+    // Events
+    window.addEventListener("click", loopThroughFormInputs);
+
+  </script>
