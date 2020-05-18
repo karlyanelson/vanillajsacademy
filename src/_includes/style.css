@@ -1,7 +1,7 @@
 :root {
     --color-bg: #EAEAEA;
     --color-txt: #1d1e22;
-    --color-action: #0867b7;
+    --color-action: 8, 103, 183;
     --color-focus: #3095ff;
 }
 
@@ -9,7 +9,7 @@
     :root {
         --color-bg: #1d1e22;
         --color-txt: #EAEAEA;
-        --color-action: #21adff;
+        --color-action: 33, 173, 255;
     }
 }
 
@@ -46,10 +46,12 @@ input, textarea {
 }
 
 input:focus,
+input:hover,
 input:active,
 textarea:focus,
+textarea:hover,
 textarea:active {
-    border-color: var(--color-action);
+    border-color: rgb(var(--color-action));
 }
 
 form {
@@ -63,25 +65,25 @@ textarea {
 }
 
 button {
-    background-color: var(--color-action);
+    background-color: rgb(var(--color-action));
     color: var(--color-bg);
     padding: .5rem 1rem;
-    border: none;
+    border: 2px solid rgb(var(--color-action));
 }
 
 button:hover,
 button:focus {
-    opacity: .8;
+    background-color: rgba(var(--color-action), .75);
 }
 
 a {
-    color: var(--color-action);
+    color: rgb(var(--color-action));
     padding: .125rem;
 }
 
 a:hover,
 a:focus {
-    background-color: var(--color-action);
+    background-color: rgb(var(--color-action));
     color: var(--color-bg);
 }
 
@@ -116,20 +118,19 @@ input {
     left: 0;
 }
 
-.checkbox input:focus + label::before {
-    border-color: var(--color-action);
+.checkbox input:focus + label::before,
+.checkbox input:hover + label::before {
+    border-color: rgb(var(--color-action));
     outline: var(--color-focus) auto .25rem;
-    /* outline: -webkit-focus-ring-color auto 5px; */
 }
 
 .checkbox input:checked + label::before {
-    background-color: var(--color-action);
-    border-color: var(--color-action);
+    background-color: rgb(var(--color-action));
+    border-color: rgb(var(--color-action));
 }
 
 /* checkbox custom checkmark */
 .checkbox label::after {
-    content: "";
     display: inline-block;
     height: .25rem;
     width: .5rem;
