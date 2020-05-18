@@ -26,6 +26,16 @@ body {
     font-family: "Lucida Console", Monaco, monospace;
 }
 
+footer {
+    border-top: 1px solid lightgray;
+    padding: 1.5rem 0;
+}
+
+footer a {
+    display: inline-block;
+    margin: .25rem 0;
+}
+
 input:focus, button:focus, a:focus, textarea:focus {
     outline: var(--color-focus) auto .25rem;
 }
@@ -85,11 +95,6 @@ a:hover,
 a:focus {
     background-color: rgb(var(--color-action));
     color: var(--color-bg);
-}
-
-footer {
-    border-top: 1px solid lightgray;
-    padding: 1.5rem 0;
 }
 
 input {
