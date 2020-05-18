@@ -26,24 +26,29 @@ body {
     font-family: "Lucida Console", Monaco, monospace;
 }
 
-input:focus, button:focus, a:focus {
+input:focus, button:focus, a:focus, textarea:focus {
     outline: var(--color-focus) auto .25rem;
 }
 
-input, button {
+input, button, textarea {
     font-size: 1rem;
 }
 
 input {
+    margin-bottom: 1.5rem;
+}
+
+input, textarea {
     background-color: var(--color-bg);
     color: var(--color-txt);
     padding: .5rem;
     border: 2px solid var(--color-txt);
-    margin-bottom: 1.5rem;
 }
 
 input:focus,
-input:active {
+input:active,
+textarea:focus,
+textarea:active {
     border-color: var(--color-action);
 }
 
@@ -52,7 +57,8 @@ form {
 }
 
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+textarea {
     width: 100%;
 }
 
@@ -84,19 +90,9 @@ footer {
     padding: 1.5rem 0;
 }
 
-/* label {
-    display: block;
-    width: 100%;
-} */
-
 input {
     margin-bottom: 1rem;
 }
-/* 
-[type="checkbox"] {
-    margin-bottom: 0;
-    margin-right: 0.25em;
-} */
 
 .checkbox {
     position: relative;

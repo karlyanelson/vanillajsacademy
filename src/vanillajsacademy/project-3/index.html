@@ -56,27 +56,27 @@ tags: project
         <button type="submit">Change Passwords</button>
       </p>
     </form>
-  </main>
+</main>
 
-  <script>
-    // Methods
-    function togglePassword(passwordInput) {
-      passwordInput.type = event.target.checked ? "text" : "password";
+<script>
+  // Methods
+  function togglePassword(passwordInput) {
+    passwordInput.type = event.target.checked ? "text" : "password";
+  }
+
+  function togglePasswords(event) {
+    if (!event.target.matches("[data-pw-toggle]")) {
+      return;
     }
 
-    function togglePasswords(event) {
-      if (!event.target.matches("[data-pw-toggle]")) {
-        return;
-      }
+    var form = event.target.form;
 
-      var form = event.target.form;
+    var passwords = form.querySelectorAll("[data-password]");
 
-      var passwords = form.querySelectorAll("[data-password]");
+    passwords.forEach(togglePassword);
+  }
 
-      passwords.forEach(togglePassword);
-    }
+  // Events
+  document.addEventListener("change", togglePasswords);
 
-    // Events
-    document.addEventListener("change", togglePasswords);
-
-  </script>
+</script>
