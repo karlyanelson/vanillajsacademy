@@ -7,18 +7,10 @@ layout: layout_base.njk
 
 {{ content | safe }}
 
-{% set curIndex = '' %}
-
-{%- for project in collections.project -%}
-	{% if page.url == project.url %}
-		{% set curIndex = loop.index0 %}
-	{% endif %}
-{%- endfor -%}
-
-{% set prevIndex = curIndex - 1 %}
-{% set nextIndex = curIndex + 1 %}
+{% set previousProject = collections.project | getPreviousCollectionItem(page) %}
+{% set nextProject = collections.project | getNextCollectionItem(page) %}
 
 <footer class="footer-project"> 
-	{% if collections.project[prevIndex] %}<div class="footer-project-prev"><a  href={{ collections.project[prevIndex].url }}>Previous Project</a></div>{% endif %}
-	{% if collections.project[nextIndex] %}<div class="footer-project-next"><a href={{ collections.project[nextIndex].url }}>Next Project</a></div>{% endif %}
+	{% if previousProject %}<div class="footer-project-prev"><a  href={{ previousProject.url }}>Previous Project</a></div>{% endif %}
+	{% if nextProject %}<div class="footer-project-next"><a href={{ nextProject.url }}>Next Project</a></div>{% endif %}
 </footer>
