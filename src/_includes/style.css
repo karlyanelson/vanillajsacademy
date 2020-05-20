@@ -21,6 +21,12 @@
     }
 }
 
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
 html {
     font-size: 20px;
 }
@@ -42,6 +48,20 @@ footer {
 footer a {
     display: inline-block;
     margin: .25rem 0;
+}
+
+.footer-project {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+.footer-project-prev {
+    grid-column-start: 1;
+}
+
+.footer-project-next {
+    grid-column-start: 2;
+    text-align: right;
 }
 
 form {
