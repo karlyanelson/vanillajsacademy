@@ -1,8 +1,19 @@
 ---
-layout: layout_home.njk
+layout: layout_base.njk
 ---
-<ol>
-    {%- for project in collections.project -%}
-    <li><a href="{{ project.url }}"">{{ project.data.title }}</a></li>
-    {%- endfor -%}
-</ol>
+
+<header>
+    <h1>Vanilla Javascript Academy Projects</h1>
+</header>
+<main>
+    <ol>
+        {%- for project in collections.project -%}
+        <li><a href="{{ project.url }}"">{{ project.data.title }}</a></li>
+        {%- endfor -%}
+    </ol>
+</main>
+<footer>
+    <a href="https://github.com/karlyanelson/vanillajsacademy">View on Github</a>
+    <span>|</span>
+    <a href="https://codepen.io/collection/Xypgzq">View on CodePen</a>
+</footer>

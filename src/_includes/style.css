@@ -9,8 +9,21 @@
     :root {
         --color-bg: #1d1e22;
         --color-txt: #EAEAEA;
-        --color-action: 33, 173, 255;
+        /* blues */
+        /* --color-action: 33, 173, 255;  */
+        --color-action: 53, 160, 222; 
+        /* --color-action: 128, 155, 189;  */
+        /* greens */
+        /* --color-action: 54, 193, 117; */
+        /* --color-action: 83, 181, 100; */
+        /* --color-action: 150, 179, 138; */
     }
+}
+
+*,
+*:before,
+*:after {
+    border-radius: .25rem;
 }
 
 html {
@@ -23,7 +36,7 @@ body {
     max-width: 40rem;
     margin: 0 auto;
     padding: 1.5rem;
-    font-family: "Lucida Console", Monaco, monospace;
+    font-family: Monaco, monospace;
 }
 
 footer {
@@ -34,6 +47,10 @@ footer {
 footer a {
     display: inline-block;
     margin: .25rem 0;
+}
+
+form {
+    margin-bottom: 4rem;
 }
 
 input:focus, button:focus, a:focus, textarea:focus {
@@ -64,14 +81,16 @@ textarea:active {
     border-color: rgb(var(--color-action));
 }
 
-form {
-    margin-bottom: 4rem;
-}
-
 input[type="text"],
 input[type="password"],
 textarea {
     width: 100%;
+}
+
+textarea {
+    min-height: 10rem;
+    max-width: 100%;
+    min-width: 100%;
 }
 
 button {
@@ -100,6 +119,16 @@ a:focus {
 }
 
 input {
+    margin-bottom: 1rem;
+}
+
+ol {
+    display: inline-block;
+    padding: 1rem 0;
+    margin: 1.5rem;
+}
+
+li {
     margin-bottom: 1rem;
 }
 
