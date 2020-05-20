@@ -20,22 +20,18 @@ tags: project
     const wordCount = document.querySelector("#word-count");
 
     // Methods
-    function filterOutSpaces(item) {
-    // check if the item in the array is a space (ie: an empty string)
-    return item !== "";
-    }
-
-    function countWords() {
-    const wordArray = text.value.split(" ");
-    return wordArray.filter(filterOutSpaces).length;
+    function filterOutEmptyValues(item) {
+    // check if the item in the array is an empty string
+    return item.length;
     }
 
     function updateCounters() {
     charCount.textContent = text.value.length;
-    wordCount.textContent = countWords();
+    wordCount.textContent = text.value
+        .split(/\s+/) // split at spaces and new lines
+        .filter(filterOutEmptyValues).length;
     }
 
     // Events
     document.addEventListener("input", updateCounters);
-
 </script>
