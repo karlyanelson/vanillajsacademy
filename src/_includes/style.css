@@ -3,6 +3,7 @@
     --color-txt: #1d1e22;
     --color-action: 8, 103, 183;
     --color-focus: #3095ff;
+    --border-radius: .25rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -18,12 +19,6 @@
         /* --color-action: 83, 181, 100; */
         /* --color-action: 150, 179, 138; */
     }
-}
-
-*,
-*:before,
-*:after {
-    border-radius: .25rem;
 }
 
 html {
@@ -51,6 +46,13 @@ footer a {
 
 form {
     margin-bottom: 4rem;
+}
+
+input,
+textarea,
+button,
+a {
+    border-radius: var(--border-radius);
 }
 
 input:focus, button:focus, a:focus, textarea:focus {
@@ -149,6 +151,7 @@ li {
     width: 1rem;
     
     border: 2px solid var(--color-txt);
+    border-radius: var(--border-radius);
 
     top: .125rem;
     left: 0;
@@ -158,6 +161,11 @@ li {
 .checkbox input:hover + label::before {
     border-color: rgb(var(--color-action));
     outline: var(--color-focus) auto .25rem;
+}
+
+.checkbox input:checked:focus + label::before,
+.checkbox input:checked:hover + label::before {
+    background-color: rgba(var(--color-action), .75);
 }
 
 .checkbox input:checked + label::before {
