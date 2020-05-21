@@ -44,12 +44,12 @@ h1 {
     margin: 3rem 0;
 }
 
-footer {
+.footer {
     border-top: 1px solid rgba(var(--color-txt), .25);
     padding: 1.5rem 0;
 }
 
-footer a {
+.footer a {
     display: inline-block;
     margin: .25rem 0;
 }

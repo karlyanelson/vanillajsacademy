@@ -22,15 +22,19 @@ tags: project
 
     // Methods
     function filterOutEmptyValues(item) {
-    // check if the item in the array is an empty string
-    return item.length;
+        // check if the item in the array is an empty string
+        return item !== '';
     }
 
     function updateCounters() {
-    charCount.textContent = text.value.length;
-    wordCount.textContent = text.value
-        .split(/\s+/) // split at spaces and new lines
-        .filter(filterOutEmptyValues).length;
+        // get word count
+        const words = text.value.split(/\s+/).filter(filterOutEmptyValues);  // split at spaces and new lines
+        
+        // display word count
+        wordCount.textContent = words.length;
+
+        // display character count
+        charCount.textContent = text.value.length;
     }
 
     // Events
