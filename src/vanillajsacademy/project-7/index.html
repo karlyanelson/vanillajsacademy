@@ -17,23 +17,34 @@ tags: project
     const getQuoteBtn = document.querySelector("#getQuote");
     const quote = document.querySelector("#quote");
     const quoteContainer = document.querySelector("blockquote");
+    const ronImg = document.querySelector('img');
+    const ronImgBase = 'https://static.parade.com/wp-content/uploads/2013/10/tv-show-best-boss-ron-swanson.jpg';
+    const ronImgBacon = 'https://i.ytimg.com/vi/DleceyAO34M/maxresdefault.jpg';
 
     // Methods
     function handleResponse(response) {
-    if (response.ok) {
-        return response.json();
-    } else {
-        return Promise.reject(response);
+        if (response.ok) {
+            return response.json();
+        } else {
+            return Promise.reject(response);
+        }
     }
+
+    function handleBacon(response) {
+        const text = response[0];
+        text.includes('bacon') ? ronImg.src = ronImgBacon : ronImg.src = ronImgBase;
+        return response;
     }
 
     function showQuote() {
-    fetch("https://ron-swanson-quotes.herokuapp.com/v2/quotes")
+    fetch("https://ron-swanson-quotes.herokuapp.com/v2/quotes")     
         .then(handleResponse)
         .then(function (data) {
             quote.textContent = data[0];
             quoteContainer.classList.remove('error');
+            return data;
         })
+        .then(handleBacon)
         .catch(function (err) {
             console.warn("Error:", err);
             quote.textContent = 'Sorry, there was a problem getting your Ron Swanson quote. Please eat some bacon and try again later.'
