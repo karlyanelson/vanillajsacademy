@@ -66,6 +66,7 @@ h1 {
 }
 
 .footer-project {
+    margin-top: 3rem;
     display: grid;
     grid-template-columns: auto auto;
 }
@@ -142,6 +143,11 @@ button:focus {
     background-color: rgba(var(--color-action), .75);
 }
 
+.btn-full {
+    display: block;
+    width: 100%;
+}
+
 a {
     color: rgb(var(--color-action));
     padding: .125rem;
@@ -167,6 +173,17 @@ ol {
 
 li {
     margin-bottom: 1rem;
+}
+
+img {
+    width: 100%;
+}
+
+blockquote {
+    background: rgba(var(--color-txt), .05);
+    padding: 1rem;
+    margin: 1rem 0;
+    font-size: 1.25em;
 }
 
 .checkbox {
