@@ -7,7 +7,7 @@ tags: project
 	<h1>{{title}}</h1>
     <img class="img-ron" src="https://static.parade.com/wp-content/uploads/2013/10/tv-show-best-boss-ron-swanson.jpg" alt="Ron Swanson.">
 
-    <blockquote>"<span aria-live="polite" id="quote">Loading...</span>"</blockquote>
+    <blockquote aria-live="polite" id="quote">Loading...</blockquote>
 
     <button class="btn-full" id="getQuote">More Ron</button>
 </main>
@@ -42,7 +42,7 @@ tags: project
     fetch("https://ron-swanson-quotes.herokuapp.com/v2/quotes")     
         .then(handleResponse)
         .then(function (data) {
-            quote.textContent = data[0];
+            quote.textContent = '"' + data[0] + '"';
             quoteContainer.classList.remove('error');
             return data;
         })
