@@ -38,8 +38,14 @@ tags: project
         if (last50quotes.length > 50) { // we only want to check the last 50 quotes, not the last 51
             last50quotes.shift()
         }
-        last50quotes.indexOf(quoteText) > -1 ? getQuote() : last50quotes.push(quoteText);
-        return quoteText
+        if (last50quotes.indexOf(quoteText) > -1) {
+            // quote.textContent = 'Loading...';
+            getQuote();
+            return 'Loading...';
+        } else{
+            last50quotes.push(quoteText);
+            return quoteText;
+        } 
     }
 
     function showQuoteText(quoteText) {
