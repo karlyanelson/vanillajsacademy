@@ -195,6 +195,12 @@ blockquote.error {
     background: none;
 }
 
+article {
+    background-color: rgba(var(--color-txt), .05);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
 .checkbox {
     position: relative;
 }

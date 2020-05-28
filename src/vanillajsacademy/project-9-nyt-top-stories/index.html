@@ -1,0 +1,61 @@
+---
+layout: layout_project.njk
+title: 'Project 9: NYT Top Stories'
+tags: project
+---
+<main>
+    <h1>{{title}}</h1>
+	<div id="app" role="feed">Loading...</div>
+</main>
+
+<script>
+    // Selectors
+    const APIKEY = process.env.PROJ9_API_KEY;
+    const nyTimesApi = `https://api.nytimes.com/svc/topstories/v2/home.json?api-key=${APIKEY}`;
+    const app = document.querySelector('#app');
+
+    // Methods
+    function handleResponse(response) {
+        if (response.ok) {
+            return response.json();
+        } else {
+            return Promise.reject(response);
+        }
+    }
+
+    function handleError(err) {
+        console.warn("Error:", err);
+        app.textContent = 'Sorry, there was a problem getting the Top Stories.'
+    }
+
+
+
+    function showTopStories(response) {
+        function mapTopStories(story) {
+            return '<article role="article">' 
+                + '<img src="' + story.multimedia[0].url + '"'+ 'alt="' + story.multimedia[0].caption + '+">'
+                + '<h2>' + story.title + '</h2>' 
+                + '<p>' + story.abstract + '</p>' 
+                + '<a href="' + story.short_url + '">'+ 'Read article' + '</a>' 
+                + '</article>';
+        }
+
+        const topStories = response.results;
+
+        app.innerHTML = topStories.map(mapTopStories).join('');
+
+        console.log(response);
+
+    }
+
+    function getTopStories() {
+        fetch(nyTimesApi)
+            .then(handleResponse)
+            .then(showTopStories)
+            .catch(handleError)
+    }
+
+    // Events
+    getTopStories();
+
+</script>
