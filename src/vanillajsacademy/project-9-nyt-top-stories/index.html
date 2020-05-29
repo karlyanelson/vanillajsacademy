@@ -36,18 +36,14 @@ tags: project
         function mapTopStories(story) {
             return '<article role="article">' 
                 + '<img src="' + story.multimedia[0].url + '"'+ 'alt="' + story.multimedia[0].caption + '+">'
-                + '<h2>' + story.title + '</h2>' 
+                + '<h2><a href="' + story.short_url + '">' + story.title + '</a>' + '</h2>' 
                 + '<p>' + story.abstract + '</p>' 
-                + '<a href="' + story.short_url + '">'+ 'Read article' + '</a>' 
                 + '</article>';
         }
 
         const topStories = response.results;
 
         app.innerHTML = topStories.map(mapTopStories).join('');
-
-        console.log(response);
-
     }
 
     function getTopStories() {
