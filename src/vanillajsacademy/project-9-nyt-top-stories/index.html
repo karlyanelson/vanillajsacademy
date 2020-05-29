@@ -5,9 +5,11 @@ tags: project
 ---
 <main>
     <h1>{{title}}</h1>
-	<div id="app" role="feed">Loading...</div>
+	<div id="app" role="feed"><p>Loading <a href="https://www.nytimes.com/trending/">New York Times Top Stories</a>...</p></div>
 </main>
 
+<!-- Polyfills for fetch and Promises -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default%2Cfetch"></script>
 <script>
     // Selectors
     const APIKEY = 'UQ5zni8e7O0EghWtMiqc9Uf3DtI8SztD';
@@ -25,7 +27,7 @@ tags: project
 
     function handleError(err) {
         console.warn("Error:", err);
-        app.textContent = 'Sorry, there was a problem getting the Top Stories.'
+        app.innerHTML = "<p>Sorry, there was a problem getting the top stories from New York Times. You can view them on " + "<a href='https://www.nytimes.com/trending/''>New York Times' website.</a></p>";
     }
 
 
