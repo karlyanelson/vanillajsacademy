@@ -15,6 +15,7 @@ tags: project
     const APIKEY = 'UQ5zni8e7O0EghWtMiqc9Uf3DtI8SztD';
     const app = document.querySelector('#app');
     const nytSections = ['us', 'world', 'arts', 'technology'];
+    const numberofArticles = 3;
     let nyTimesApi = `https://api.nytimes.com/svc/topstories/v2/home.json?api-key=${APIKEY}`;
     // let html = [];
 
@@ -52,7 +53,7 @@ tags: project
     }
 
     function showTopStories(response) {
-        const topStories = response.results.slice(0, 5);
+        const topStories = response.results.slice(0, numberofArticles);
         app.innerHTML += '<h2>' + response.section + '</h2>' + topStories.map(mapTopStories).join('');
         // html.push('<h2>' + response.section + '</h2>' + topStories.map(mapTopStories).join(''));
         // console.log(html);
@@ -74,6 +75,7 @@ tags: project
 
         // console.log(html);
         // app.innerHTML = html;
+        // do something with Promise.all ?
     }
 
     // Events

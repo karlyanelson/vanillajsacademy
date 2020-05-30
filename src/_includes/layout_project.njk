@@ -11,6 +11,6 @@ layout: layout_base.njk
 {% set nextProject = collections.project | getNextCollectionItem(page) %}
 
 <nav class="footer footer-project"> 
-	{% if previousProject %}<div class="footer-project-prev"><a  href={{ previousProject.url }}>Previous Project</a></div>{% endif %}
-	{% if nextProject %}<div class="footer-project-next"><a href={{ nextProject.url }}>Next Project</a></div>{% endif %}
+	{% if previousProject %}<div class="footer-project-prev"><a  href={{ previousProject.url }}>{{previousProject.data.title}}</a></div>{% endif %}
+	{% if nextProject %}<div class="footer-project-next"><a href={{ nextProject.url }}>{{nextProject.data.title}}</a></div>{% endif %}
 </nav>

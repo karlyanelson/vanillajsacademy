@@ -161,13 +161,11 @@ button:focus {
 a {
     color: rgb(var(--color-action));
     padding: .125rem;
-    text-decoration: none;
 }
 
 a:hover,
 a:focus {
     background-color: rgba(var(--color-action), .1);
-    text-decoration: underline;
 }
 
 input {
