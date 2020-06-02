@@ -1,7 +1,7 @@
 ---
 layout: layout_base.njk
 ---
-<nav>
+<nav aria-label="Back to Home">
 	<a href="/vanillajsacademy/">View All Projects</a>
 </nav>
 
@@ -10,7 +10,7 @@ layout: layout_base.njk
 {% set previousProject = collections.project | getPreviousCollectionItem(page) %}
 {% set nextProject = collections.project | getNextCollectionItem(page) %}
 
-<nav class="footer footer-project"> 
-	{% if previousProject %}<div class="footer-project-prev"><a  href={{ previousProject.url }}>{{previousProject.data.title}}</a></div>{% endif %}
-	{% if nextProject %}<div class="footer-project-next"><a href={{ nextProject.url }}>{{nextProject.data.title}}</a></div>{% endif %}
+<nav aria-label="Next and Previous Projects" class="footer footer-project"> 
+	{% if previousProject %}<div class="footer-project-prev"><a  href={{ previousProject.url }}>← {{previousProject.data.title}}</a></div>{% endif %}
+	{% if nextProject %}<div class="footer-project-next"><a href={{ nextProject.url }}>{{nextProject.data.title}} →</a></div>{% endif %}
 </nav>

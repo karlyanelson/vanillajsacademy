@@ -277,3 +277,27 @@ article img {
 .checkbox input[type="checkbox"]:checked + label::after {
     content: "";
 }
+
+/* A simple grid */
+
+.grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+    column-gap: 0.5rem;
+    row-gap: 0.5rem;
+}
+
+.monster-grid {
+    margin: 0;
+    padding: 0;
+}
+
+.monster-grid .grid-cell{
+    min-height: 6rem;
+	padding: 1rem;
+    background-color: white;
+    border-radius: .25rem;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+}
