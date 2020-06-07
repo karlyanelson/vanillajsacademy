@@ -313,3 +313,7 @@ article img {
 .monster-grid button:focus {
     color: rgb(var(--color-action));
 }
+
+.monster-socks {
+    max-width: 100px;
+}
