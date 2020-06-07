@@ -287,6 +287,8 @@ article img {
     row-gap: 0.5rem;
 }
 
+/* Projects 12 & 13 */
+
 .monster-grid {
     margin: 0;
     padding: 0;
@@ -300,4 +302,14 @@ article img {
     display: flex;
     align-items: center;
     margin-bottom: 0;
+}
+
+.monster-grid button {
+    background: transparent;
+    border: none;
+}
+
+.monster-grid button:hover,
+.monster-grid button:focus {
+    color: rgb(var(--color-action));
 }
