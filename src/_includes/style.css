@@ -54,6 +54,10 @@ h2 {
     text-transform: capitalize;
 }
 
+footer {
+    margin-top: 2rem;
+}
+
 .footer {
     border-top: 1px solid rgba(var(--color-txt), .25);
     padding: 1.5rem 0;
