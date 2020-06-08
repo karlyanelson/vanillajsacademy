@@ -103,15 +103,20 @@ tags: project
         return '<li class="grid-cell">' + 
             '<button data-monster-id="' + index + '">' + 
                 '<img alt="" src="../assets/monsters/door.svg"/>' + 
-                'Open the Door' + 
+                'Open Door ' + (index + 1)  +
             '</button>' + 
         '</li>'
     }
 
     function showMonsterGrid() {
+        // Reset the monster count
         monstersRevealed = 0;
+        // Shuffle the monsters array
+        shuffle(monsters);
+
         informationalText.innerHTML = '<p>Click a door to reveal a monster. Try not to find the sock.</p>';
-        app.innerHTML = '<ul class="grid monster-grid">' + monsters.map(buildMonsterGrid).join('') + '</ul>';
+        app.innerHTML = '<p role="status" aria-live="polite">Score: <span id="score">0</span> out of '+ (monsters.length - 1) +'</p>' + 
+        '<ul class="grid monster-grid">' + monsters.map(buildMonsterGrid).join('') + '</ul>';
     }
 
     function youLose() {
@@ -128,6 +133,8 @@ tags: project
     }
 
     function clickHandler() {
+        let score = document.querySelector('#score');
+
         // If we're on the winning or losing screen, and the user clicks Play Again
         if(event.target.matches('#playAgainBtn')) {
             showMonsterGrid();
@@ -143,13 +150,17 @@ tags: project
 
         if (monsters[id].image.includes('sock')) {
             youLose();
+            return;
         }
 
         monstersRevealed++
 
         if(monstersRevealed === monsters.length - 1) {
             youWin();
+            return;
         }
+
+        score.textContent = monstersRevealed;
         
         // Get the door button's outer grid cell element
         let gridCell = door.parentNode;
@@ -159,9 +170,6 @@ tags: project
     }
 
     // Events
-    // Shuffle the monsters array
-    shuffle(monsters);
-
     // Show the grid
     showMonsterGrid();
 
