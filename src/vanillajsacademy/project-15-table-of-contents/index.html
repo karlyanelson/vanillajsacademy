@@ -112,6 +112,8 @@ tags: project
     }
     
     // Events
-    tableOfContents.innerHTML = headings.map(buildToC).join("");
+    if(heading2s.length > 0){
+        tableOfContents.innerHTML = headings.map(buildToC).join("");
+    }
 
 </script>
