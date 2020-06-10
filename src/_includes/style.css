@@ -311,6 +311,7 @@ article img {
 .monster-grid button {
     background: transparent;
     border: none;
+    color: black;
 }
 
 .monster-grid button:hover,
