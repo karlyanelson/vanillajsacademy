@@ -43,7 +43,7 @@ body {
 }
 
 p {
-    line-height: 1.8;
+    line-height: 1.6;
 }
 
 h1 {
@@ -291,7 +291,7 @@ article img {
     row-gap: 0.5rem;
 }
 
-/* Projects 12 & 13 */
+/* Projects 12 - 14 */
 
 .monster-grid {
     margin: 0;
@@ -316,7 +316,7 @@ article img {
 
 .monster-grid button:hover,
 .monster-grid button:focus {
-    color: rgb(var(--color-action));
+    color: rgb(8, 103, 183);
 }
 
 .monster-socks {
