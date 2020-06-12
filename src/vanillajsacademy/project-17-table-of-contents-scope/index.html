@@ -87,40 +87,37 @@ tags: project
 </footer>
 
 <script>
-    // for each heading in the page, check if it has an id
-    // if it doesn't, add an id of its title smushed together
-    // for each one, add an li and link - text, href=id
-    function buildToC(heading) {
-        if (heading.id.length < 1) {
-            heading.id = heading.textContent.replace(/\W+/g, "");
-        }
+;(function () {
+  // find the h2s
+  const heading2s = document.querySelectorAll("h2");
 
-        return (
-            '<li><a href="#' + heading.id + '">' + heading.textContent + "</a></li>"
-        );
+  // convert from node list to array
+  const headingsArray = Array.prototype.slice.call(heading2s);
+
+  // find table of contents conntainer
+  const tableOfContents = document.querySelector("#table-of-contents");
+
+  // for each heading in the page, check if it has an id
+  // if it doesn't, add an id of its title smushed together
+  // for each one, add an li and link - text, href=id
+  function buildToC(heading) {
+    if (heading.id.length < 1) {
+      heading.id = heading.textContent.replace(/\W+/g, "");
     }
 
-    function addTableOFContents() {
-        // find the h2s
-        const heading2s = document.querySelectorAll("h2");
+    return (
+      '<li><a href="#' + heading.id + '">' + heading.textContent + "</a></li>"
+    );
+  }
 
-        // convert from node list to array
-        const headingsArray = Array.prototype.slice.call(heading2s);
-
-        // find table of contents conntainer
-        const tableOfContents = document.querySelector("#table-of-contents");
-
-        if (heading2s.length > 0) {
-            tableOfContents.innerHTML =
-            '<nav aria-labelledby="toc-heading">' +
-                '<h2 id="toc-heading">Table of Contents</h2>' +
-                "<ol>" +
-                    headingsArray.map(buildToC).join("");
-                +"</ol>";
-            ("</nav>");
-        }
-    }
-
-    // Events
-    addTableOFContents();
+  if (heading2s.length > 0) {
+    tableOfContents.innerHTML =
+      '<nav aria-labelledby="toc-heading">' +
+      '<h2 id="toc-heading">Table of Contents</h2>' +
+      "<ol>" +
+      headingsArray.map(buildToC).join("");
+    +"</ol>";
+    ("</nav>");
+  }
+})();
 </script>
