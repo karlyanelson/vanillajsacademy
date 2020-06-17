@@ -50,10 +50,6 @@ h1 {
     margin: 3rem 0;
 }
 
-h2 {
-    text-transform: capitalize;
-}
-
 footer {
     margin-top: 2rem;
 }
@@ -188,6 +184,10 @@ li {
 
 img {
     width: 100%;
+}
+
+.img-small {
+    max-width: 50%;
 }
 
 blockquote {

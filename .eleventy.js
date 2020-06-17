@@ -2,11 +2,9 @@
 const CleanCSS = require("clean-css");
 
 module.exports = function(eleventyConfig) {
-  
     // eleventyConfig.setTemplateFormats([
     //   "css" // css is not yet a recognized template extension in Eleventy
     // ]);
-
 
     // Copy over assets/ folder
     eleventyConfig.addPassthroughCopy({ "src/vanillajsacademy/assets/": "./vanillajsacademy/assets/" });
