@@ -14,7 +14,8 @@ const getWeather = function(options) {
   const defaults = {
     selector: '#app',
     tempUnit: 'Fahrenheit',
-    icon: true
+    icon: true,
+    message: "It's currently {temperature} and {conditions} in {location}"
   }
 
   // Merge any user options into the defaults
@@ -64,15 +65,14 @@ const getWeather = function(options) {
     let tempName = settings.tempUnit;
     let iconSrc = data.weather.icon;
     let icon = settings.icon ? "<img class='img-small' alt='' src=" + "https://www.weatherbit.io/static/img/icons/" + sanitizeHTML(iconSrc) + ".png>" : ""
-      
-    weatherContainer.innerHTML = icon
-      + "<p>It is currently " + sanitizeHTML(temp) + " degrees " + tempName + " and " 
-      + sanitizeHTML(data.weather.description).toLowerCase()
-      + " in "
-      + sanitizeHTML(data.city_name)
-      + ", "
-      + sanitizeHTML(data.state_code)
-      + "</p>";
+    
+    let temperatureText = sanitizeHTML(temp) + " degrees " + sanitizeHTML(settings.tempUnit);
+    let conditionsText= sanitizeHTML(data.weather.description).toLowerCase();
+    let locationText = sanitizeHTML(data.city_name) + ", " + sanitizeHTML(data.state_code);
+
+    let message = settings.message.replace('{temperature}', temperatureText).replace('{conditions}', conditionsText).replace('{location}', locationText);
+    
+    weatherContainer.innerHTML = icon + "<p>" + message + "</p>";
   }
   
   function handleError(error) {
@@ -94,7 +94,8 @@ const getWeather = function(options) {
 }
 
 getWeather({
-  tempUnit: 'Celsius'
+  tempUnit: 'Celsius',
+  message: "It's {conditions} and {temperature} in {location}."
 })
   
 
