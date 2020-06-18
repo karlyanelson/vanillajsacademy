@@ -186,10 +186,6 @@ img {
     width: 100%;
 }
 
-.img-small {
-    max-width: 50%;
-}
-
 blockquote {
     background: rgba(var(--color-txt), .05);
     padding: 2rem 1.5rem;
@@ -321,4 +317,13 @@ article img {
 
 .monster-socks {
     max-width: 100px;
+}
+
+/* Utilities */
+.align-center {
+    text-align: center;
+}
+
+.img-small {
+    max-width: 10rem;
 }

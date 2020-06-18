@@ -1,6 +1,6 @@
 ---
 layout: layout_project.njk
-title: "Project 18: Weather App"
+title: "Project 19: Weather App Plugin"
 tags: project
 ---
 <main class="align-center">
@@ -9,9 +9,18 @@ tags: project
 </main>
 
 <script>
-;(function(){
-  
-  const app = document.querySelector("#app");
+const getWeather = function(options) {
+  // Default settings
+  const defaults = {
+    selector: '#app',
+    tempUnit: 'Fahrenheit',
+    icon: true
+  }
+
+  // Merge any user options into the defaults
+	let settings = Object.assign(defaults, options);
+
+  const weatherContainer = document.querySelector(settings.selector);
   
   let locationAPI = 'https://ipapi.co/json';
   let weatherAPI = 'https://api.weatherbit.io/v2.0/current?key=e215256c477343769276979676022b66';
@@ -23,7 +32,7 @@ tags: project
    * @return {String} str  The sanitized string
    */
   function sanitizeHTML(str) {
-    var temp = document.createElement('div');
+    let temp = document.createElement('div');
     temp.textContent = str;
     return temp.innerHTML;
   };
@@ -43,22 +52,21 @@ tags: project
       }
     return location;
   }
-
-  function cToF(temp){
-      return (parseFloat(temp) * 9/5) + 32;
-  }
   
   function getWeatherData(location) {
-    return (fetch(weatherAPI + '&' + 'lat=' + location.lat + '&' + 'lon=' + location.lon));
+    let tempUnit = settings.tempUnit === 'Fahrenheit' ? 'I' : 'M';
+    return (fetch(weatherAPI + '&lat=' + location.lat + '&lon=' + location.lon + '&units=' + tempUnit));
   }
   
   function showWeather(weather) {
     const data = weather.data[0];
-    let temp = cToF(data.temp).toFixed(1);
-    let icon = data.weather.icon;
+    let temp = data.temp.toFixed(1);
+    let tempName = settings.tempUnit;
+    let iconSrc = data.weather.icon;
+    let icon = settings.icon ? "<img class='img-small' alt='' src=" + "https://www.weatherbit.io/static/img/icons/" + sanitizeHTML(iconSrc) + ".png>" : ""
       
-    app.innerHTML = "<img class='img-small' alt='' src=" + "https://www.weatherbit.io/static/img/icons/" + sanitizeHTML(icon) + ".png>"
-      + "<p>It is currently " + sanitizeHTML(temp) + " degrees Fahrenheight and " 
+    weatherContainer.innerHTML = icon
+      + "<p>It is currently " + sanitizeHTML(temp) + " degrees " + tempName + " and " 
       + sanitizeHTML(data.weather.description).toLowerCase()
       + " in "
       + sanitizeHTML(data.city_name)
@@ -69,7 +77,7 @@ tags: project
   
   function handleError(error) {
     console.warn('Something went wrong:', error);
-    app.innerHTML = "<p>Oops, something went wrong and we couldn't get your weather. Hope it's sunny!</p>";
+    weatherContainer.innerHTML = "<p>Oops, something went wrong and we couldn't get your weather. Hope it's sunny!</p>";
   }
   
   function fetchData() {
@@ -83,7 +91,11 @@ tags: project
   }
   
   fetchData();
+}
+
+getWeather({
+  tempUnit: 'Celsius'
+})
   
-})();
 
 </script>
