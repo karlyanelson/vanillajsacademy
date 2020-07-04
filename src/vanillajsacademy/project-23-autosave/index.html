@@ -41,17 +41,19 @@ tags: project
     form.querySelectorAll("input, textarea")
   );
 
+  let storagePrefix = 'form-autosave_';
+
   // methods
   function saveData(event) {
     if (!event.target.value || !event.target.id ) {
       return
     }
-    sessionStorage.setItem(event.target.id, event.target.value);
+    sessionStorage.setItem(storagePrefix + event.target.id, event.target.value);
   }
 
   function loadData() {
     inputs.forEach(function (input) {
-      let savedValue = sessionStorage.getItem(input.id);
+      let savedValue = sessionStorage.getItem(storagePrefix + input.id);
 
       if (!savedValue) {
         return;
@@ -64,19 +66,16 @@ tags: project
   function clearData(event) {
     event.preventDefault();
     inputs.forEach(function (input) {
-      sessionStorage.removeItem(input.id);
+      sessionStorage.removeItem(storagePrefix + input.id);
       input.value = "";
     });
   }
 
   // events
   loadData();
-  document.addEventListener("input", saveData, false);
-  document.addEventListener("submit", clearData, false);
+  form.addEventListener("input", saveData, false);
+  form.addEventListener("submit", clearData, false);
 
 })();
-
-
-
 
 </script>
