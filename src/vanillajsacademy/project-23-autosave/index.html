@@ -53,6 +53,10 @@ tags: project
 
   function loadData() {
     inputs.forEach(function (input) {
+      if(!input.id) {
+        return;
+      }
+
       let savedValue = sessionStorage.getItem(storagePrefix + input.id);
 
       if (!savedValue) {
@@ -66,6 +70,9 @@ tags: project
   function clearData(event) {
     event.preventDefault();
     inputs.forEach(function (input) {
+      if(!input.id) {
+        return;
+      }
       sessionStorage.removeItem(storagePrefix + input.id);
       input.value = "";
     });
