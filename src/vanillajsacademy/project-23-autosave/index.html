@@ -1,0 +1,77 @@
+---
+layout: layout_project.njk
+title: "Project 23: Autosave"
+tags: project
+---
+
+<main>
+    <h1>{{title}}</h1>
+    <form class="save-me" id="save-me">
+      <div>
+        <label for="name">Name</label>
+        <input data-form type="text" name="name" id="name">
+      </div>
+    
+      <div>
+        <label for="address">Address</label>
+        <input data-form type="text" name="address" id="address">
+      </div>
+
+      <div>
+        <label for="email">Email</label>
+        <input data-form type="email" name="email" id="email">
+      </div>
+    
+      <div>
+        <label for="more">Additional thoughts?</label>
+        <textarea data-form name="more" id="more"></textarea>
+      </div>
+      <p>
+        <button type="submit">Submit</button>
+      </p>
+
+    </form>
+</main>
+
+<script>
+// variables
+let inputs = Array.prototype.slice.call(
+  document.querySelectorAll("[data-form]")
+);
+
+// methods
+function saveInputValues() {
+  inputs.forEach(function (input) {
+    if (!input.value) {
+      return;
+    }
+    localStorage.setItem(input.id, input.value);
+  });
+}
+
+function restoreInputValues() {
+  inputs.forEach(function (input) {
+    let savedValue = localStorage.getItem(input.id);
+
+    if (!savedValue) {
+      return;
+    }
+
+    input.value = savedValue;
+  });
+}
+
+function clearForm(event) {
+  event.preventDefault();
+  inputs.forEach(function (input) {
+    localStorage.removeItem(input.id);
+    input.value = "";
+  });
+}
+
+// events
+restoreInputValues();
+document.addEventListener("input", saveInputValues, false);
+document.addEventListener("submit", clearForm, false);
+
+</script>
