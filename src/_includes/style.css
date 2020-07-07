@@ -105,15 +105,17 @@ input:focus, button:focus, a:focus, textarea:focus {
     outline: var(--color-focus) auto .25rem;
 }
 
-input, button, textarea {
+input, button, textarea, select {
     font-size: 1rem;
 }
 
-input {
+input,
+select,
+textarea {
     margin-bottom: 1.5rem;
 }
 
-input, textarea {
+input, textarea, select {
     background-color: rgb(var(--color-bg));
     color: rgb(var(--color-txt));
     padding: .5rem;
@@ -130,7 +132,8 @@ textarea:active {
 }
 
 input:not([type="checkbox"]):not([type="radio"]),
-textarea {
+textarea,
+select {
     width: 100%;
 }
 
