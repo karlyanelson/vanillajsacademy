@@ -1,0 +1,54 @@
+---
+layout: layout_project.njk
+title: "Project 28: Countdown Timer"
+tags: project
+---
+
+<main>
+    <h1>{{title}}</h1>
+    <div id="app"></div>
+</main>
+
+<script>
+    //Use state-based UI to create the timer, and countdown from 60 seconds to 0 once a second. When the timer is done, stop the countdown and provide a way for users to start it again.
+
+(function () {
+  // Variables
+  const app = document.querySelector("#app");
+  let countdownTime = 60; // 60 seconds
+  let timer = window.setInterval(countDown, 1000);
+
+  let data = {
+    count: countdownTime
+  };
+
+  // Methods
+  function countDown() {
+    if (data.count === 0) {
+      window.clearInterval(timer);
+      app.innerHTML =
+        "<h2>" + data.count + "</h2>" + "<button>Restart Countdown</button>";
+    } else {
+      data.count--;
+      renderCount();
+    }
+  }
+
+  function renderCount() {
+    app.innerHTML = "<h2>" + data.count + "</h2>";
+  }
+
+  function clickHandler(event) {
+    if (!event.target.matches("button")) {
+      return;
+    }
+
+    data.count = countdownTime;
+    timer = window.setInterval(countDown, 1000);
+  }
+
+  // Events
+  document.addEventListener("click", clickHandler);
+})();
+
+</script>
