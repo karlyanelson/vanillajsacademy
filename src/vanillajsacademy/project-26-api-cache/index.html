@@ -1,0 +1,98 @@
+---
+layout: layout_project.njk
+title: "Project 26: API Cache"
+tags: project
+---
+
+<main>
+    <h1>{{title}}</h1>
+    <div id="app">
+      <p> Loading... </p>
+    </div>
+</main>
+
+<script>
+;(function () {
+  //// Variables
+  // 1 Hour = 1000ms * 60s * 60m
+  const hour = 1000 * 60 * 60;
+
+  // 1 Day =  1000ms * 60s * 60m * 24h
+  const day = 1000 * 60 * 60 * 24;
+
+  // 1 Week =  1000ms * 60s * 60m * 24h * 7 days
+  const week = 1000 * 60 * 60 * 24 * 7;
+
+  // 1 Year =  1000ms * 60s * 60m * 24h * 365 days
+  const year = 1000 * 60 * 60 * 24 * 365;
+
+  const api = "https://vanillajsacademy.com/api/pirates.json";
+  let app = document.querySelector("#app");
+  const storageID = "pirateData";
+  const dataTimeLimit = 1 * day;
+
+  //// Methods
+  // see if the data is still good
+  function stillGood(data, goodFor) {
+    if (!data || !data.data || !data.timestamp) {
+      return false;
+    }
+
+    let difference = new Date().getTime() - data.timestamp;
+
+    return difference < goodFor;
+  }
+
+  function handleResponse(response) {
+    if (response.ok) {
+      return response.json();
+    } else {
+      return Promise.reject(response);
+    }
+  }
+
+  function mapArticles(article) {
+    return "<h2>" + article.title + "</h2>" + "<p>" + article.article + "</p>";
+  }
+
+  function showData(data) {
+    app.innerHTML = data.articles.map(mapArticles).join("");
+    return data;
+  }
+
+  function storeData(data) {
+    let storedData = {
+      data: data,
+      timestamp: new Date().getTime()
+    };
+
+    localStorage.setItem(storageID, JSON.stringify(storedData));
+    return data;
+  }
+
+  function handleError(err) {
+    console.warn(err);
+    app.innerHTML = "<p>Our API walked the plank</p>";
+  }
+
+  function getFreshData() {
+    console.log('fetching new data');
+    fetch(api)
+      .then(handleResponse)
+      .then(showData)
+      .then(storeData)
+      .catch(handleError);
+  }
+
+  function checkLocalStorage() {
+    let storedData = JSON.parse(localStorage.getItem(storageID));
+    stillGood(storedData, dataTimeLimit)
+      ? showData(storedData.data)
+      : getFreshData();
+  }
+
+  //// Events
+  checkLocalStorage();
+})();
+
+</script>

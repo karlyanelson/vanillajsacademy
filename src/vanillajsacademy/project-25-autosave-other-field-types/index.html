@@ -133,11 +133,10 @@ tags: project
       // Set the input value to the saved value of the data at that key/id in sessionStorage
       if (field.type == "checkbox") {
         field.checked = data[id];
-      }
-      if (field.type == "radio") {
+      } else if (field.type == "radio") {
         data[id] === field.value
           ? (field.checked = true)
-          : (field.checked = false);
+          : (field.checked = false); 
       } else {
         field.value = data[id];
       }
@@ -158,7 +157,6 @@ tags: project
   // events
   loadData();
   form.addEventListener("input", saveData, false);
-  // form.addEventListener("change", saveData, false);
   form.addEventListener("submit", clearData, false);
 })();
 
