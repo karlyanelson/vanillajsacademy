@@ -1,6 +1,6 @@
 ---
 layout: layout_project.njk
-title: "Project 27: API Cache - Fallback"
+title: "Project 26: API Cache"
 tags: project
 ---
 
@@ -14,26 +14,29 @@ tags: project
 <script>
 ;(function () {
   //// Variables
+  // 1 Hour = 1000ms * 60s * 60m
+  const minute = 1000 * 60;
+
+  // 1 Hour = 1000ms * 60s * 60m
+  const hour = 1000 * 60 * 60;
+
+  // 1 Day =  1000ms * 60s * 60m * 24h
+  const day = 1000 * 60 * 60 * 24;
+
+  // 1 Week =  1000ms * 60s * 60m * 24h * 7 days
+  const week = 1000 * 60 * 60 * 24 * 7;
+
+  // 1 Year =  1000ms * 60s * 60m * 24h * 365 days
+  const year = 1000 * 60 * 60 * 24 * 365;
+
+  const api = "https://vanillajsacademy.com/api/pirates.json";
   let app = document.querySelector("#app");
   const storageID = "pirateData";
-  const dataTimeLimit = 1000 * 5;
+  const dataTimeLimit = 1 * minute;
 
   //// Methods
-  /**
-   * Dynamically vary the API endpoint
-   * @return {String} The API endpoint
-   */
-  var getEndpoint = function () {
-    var endpoint = "https://vanillajsacademy.com/api/";
-    var random = Math.random();
-    if (random < 0.5) return endpoint + "pirates.json";
-
-    console.log("bad api");
-    return endpoint + "fail.json";
-  };
-
   // see if the data is still good
-  function stillGood(data, goodFor) {
+  function isDataValid(data, goodFor) {
     if (!data || !data.data || !data.timestamp) {
       return false;
     }
@@ -42,6 +45,17 @@ tags: project
 
     return difference < goodFor;
   }
+
+  /**
+  * Sanitize and encode all HTML in a user-submitted string
+  * @param  {String} str  The user-submitted string
+  * @return {String} str  The sanitized string
+  */
+  function sanitizeHTML(str) {
+      var temp = document.createElement('div');
+      temp.textContent = str;
+      return temp.innerHTML;
+  };
 
   function handleResponse(response) {
     if (response.ok) {
@@ -54,17 +68,21 @@ tags: project
   function mapArticles(article) {
     return (
       "<article>" +
-      "<h2>" +
-      article.title +
-      "</h2>" +
-      "<p>" +
-      article.article +
-      "</p>" +
+        "<h2>" +
+          sanitizeHTML(article.title) +
+        "</h2>" +
+        "<p>" +
+          sanitizeHTML(article.article) +
+        "</p>" +
       "</article>"
     );
   }
 
   function showData(data) {
+    if (data.articles.length < 1) {
+      handleError("No articles found.");
+      return;
+    }
     app.innerHTML = data.articles.map(mapArticles).join("");
     return data;
   }
@@ -80,23 +98,13 @@ tags: project
   }
 
   function handleError(err) {
-    console.warn("Something Went Wrong:" + err);
-
-    let storedData = JSON.parse(localStorage.getItem(storageID));
-
-    if (storeData) {
-      console.log(
-        "serve from cache even if its expired because the api failed."
-      );
-      showData(storedData.data);
-    } else {
-      app.innerHTML = "<p>Our API walked the plank</p>";
-    }
+    console.warn(err);
+    app.innerHTML = "<p>Ar! Our API walked the plank.</p>";
   }
 
   function getFreshData() {
-    console.log("fetching new data");
-    fetch(getEndpoint())
+    console.log('Fetched new data from api');
+    fetch(api)
       .then(handleResponse)
       .then(showData)
       .then(storeData)
@@ -105,15 +113,13 @@ tags: project
 
   function checkLocalStorage() {
     let storedData = JSON.parse(localStorage.getItem(storageID));
-    if (stillGood(storedData, dataTimeLimit)) {
-      console.log("serve from cache");
-      showData(storedData.data);
-    } else {
-      getFreshData();
-    }
+    isDataValid(storedData, dataTimeLimit)
+      ? showData(storedData.data)
+      : getFreshData();
   }
 
   //// Events
   checkLocalStorage();
 })();
+
 </script>

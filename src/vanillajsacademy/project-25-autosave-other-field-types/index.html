@@ -146,12 +146,7 @@ tags: project
   function clearData(event) {
     event.preventDefault();
     sessionStorage.removeItem(storageKey);
-    fields.forEach(function (field) {
-      if (field.type == "checkbox" || field.type == "radio") {
-        field.checked = false;
-      }
-      field.value = "";
-    });
+    form.reset();
   }
 
   // events
