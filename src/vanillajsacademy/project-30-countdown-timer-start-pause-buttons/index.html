@@ -46,13 +46,13 @@ tags: project
   let app = new Rue("#app", {
     data: {
       time: duration,
-      paused: false
+      paused: true
     },
     template: function (props) {
       let startOrPause =
-        props.paused === false
-          ? "<button data-pause>Pause</button>"
-          : "<button data-start>Start</button>";
+        props.paused
+          ? "<button data-start>Start</button>"
+          : "<button data-pause>Pause</button>";
       if (props.time <= 0) {
         startOrPause = "";
       }
@@ -68,14 +68,13 @@ tags: project
   });
 
   function countDown() {
-    // reduce by 1 second
-    app.data.time--;
-
     // check if timer should be paused
     if (app.data.paused === true) {
-      // clearInterval(timer);
       return;
     }
+
+    // reduce by 1 second
+    app.data.time--;
 
     // check if the timer should be stopped
     stopTimer();
@@ -96,13 +95,16 @@ tags: project
   }
 
   function startTimer() {
-    if (app.data.time <= 0) {
+    clearInterval(timer);
+
+    if (app.data.time < 1) {
       restartTimer();
+      return;
     }
     // start the countdown timer
-    timer = setInterval(countDown, 1000);
     app.data.paused = false;
     app.render();
+    timer = setInterval(countDown, 1000);
   }
 
   function restartTimer() {
@@ -151,7 +153,8 @@ tags: project
   }
 
   // Events
-  restartTimer();
+  // restartTimer();
+  app.render();
   document.addEventListener("click", clickHandler);
 })();
 
