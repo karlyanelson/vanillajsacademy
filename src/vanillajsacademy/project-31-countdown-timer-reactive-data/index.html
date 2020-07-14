@@ -73,7 +73,7 @@ tags: project
   let app = new Rue("#app", {
     data: {
       time: duration,
-      paused: false
+      paused: true
     },
     template: function (props) {
       let startOrPause =
@@ -170,7 +170,7 @@ tags: project
   }
 
   // Events
-  restartTimer();
+    app.render();
   document.addEventListener("click", clickHandler);
 })();
 
