@@ -35,51 +35,60 @@ tags: project
 
       let storedData = JSON.parse(localStorage.getItem(storageID));
 
-      props.places.forEach(function (place) {
-        let matchingStoredPlace = storedData.data.filter(function (storedPlace) {
-          if (place.id === storedPlace.id) {
-            return storedPlace;
+      if (storedData) {
+        app.data.places.forEach(function (place) {
+          let matchingStoredPlace = storedData.data.filter(function (
+            storedPlace
+          ) {
+            if (place.id === storedPlace.id) {
+              return storedPlace;
+            }
+          });
+
+          if (matchingStoredPlace && matchingStoredPlace[0].favorite) {
+            place.favorite = matchingStoredPlace[0].favorite;
+          } else {
+            place.favorite = false;
           }
         });
-
-        if (matchingStoredPlace) {
-          place.favorite = matchingStoredPlace[0].favorite;
-        } else {
-          place.favorite = false;
-        }
-      });
+      }
 
       return (
         "<div class='places'>" +
-        props.places.map(function (place) {
+        props.places
+          .map(function (place) {
             let icon = favoriteIconOutline;
             if (place.favorite) {
               icon = favoriteIconFilled;
             }
 
+            if (!place.favorite) {
+              place.favorite = false;
+            }
+
             return (
               "<article id='" +
-                place.id +
+              place.id +
               "'/>" +
-                "<img alt='' src='" +
-                  place.img +
-                "'/>" +
-                "<div class='place-text'>" +
-                  "<h2>" +
-                  "<a href='" +
-                    place.url +
-                  "'>" +
-                    place.place +
-                  "</a>" +
-                  "</h2>" +
-                  "<address class='place-location'>" +
-                    place.location +
-                  "</address>" +
-                  "<p>" +
-                    place.description +
-                  "</p>" +
-                  `<button aria-label='Favorite' class='fave-btn' aria-pressed='${place.favorite}'>${icon}</button>` +
-                "</div>" +
+              "<img alt='' src='" +
+              place.img +
+              "'/>" +
+              "<div class='place-text'>" +
+              "<h2>" +
+              "<a href='" +
+              place.url +
+              "'>" +
+              place.place +
+              "</a>" +
+              "</h2>" +
+              "<address class='place-location'>" +
+              place.location +
+              "</address>" +
+              "<p>" +
+              place.description +
+              "</p>" +
+              `<button aria-label='Favorite' class='fave-btn' aria-pressed='${place.favorite}'>${icon}</button>` +
+              "</div>" +
               "</article>"
             );
           })
@@ -128,9 +137,14 @@ tags: project
       }
       if (place.id === placeID) {
         place.favorite = value;
+      } else {
+        place.favorite = place.favorite;
       }
       return place;
     });
+
+    console.log("app.data.places", app.data.places);
+    console.log("favoritedPlaces", favoritedPlaces);
 
     app.data.places = favoritedPlaces;
     storeData(favoritedPlaces);
@@ -154,6 +168,4 @@ tags: project
   // Handle favoriting
   document.addEventListener("click", clickHandler);
 })();
-
-
 </script>
