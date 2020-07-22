@@ -33,62 +33,55 @@ tags: project
         return props.error;
       }
 
-      let storedData = JSON.parse(localStorage.getItem(storageID));
-
-      if (storedData) {
-        app.data.places.forEach(function (place) {
-          let matchingStoredPlace = storedData.data.filter(function (
-            storedPlace
-          ) {
-            if (place.id === storedPlace.id) {
-              return storedPlace;
-            }
-          });
-
-          if (matchingStoredPlace && matchingStoredPlace[0].favorite) {
-            place.favorite = matchingStoredPlace[0].favorite;
-          } else {
-            place.favorite = false;
-          }
-        });
-      }
-
       return (
         "<div class='places'>" +
         props.places
           .map(function (place) {
-            let icon = favoriteIconOutline;
-            if (place.favorite) {
-              icon = favoriteIconFilled;
+            let favorited;
+
+            if (props.favorites[place.id]) {
+              favorited = props.favorites[place.id];
+            } else {
+              favorited = false;
             }
 
-            if (!place.favorite) {
-              place.favorite = false;
+            let icon = favoriteIconOutline;
+
+            if (favorited) {
+              icon = favoriteIconFilled;
             }
 
             return (
               "<article id='" +
-              place.id +
+                place.id +
               "'/>" +
-              "<img alt='' src='" +
-              place.img +
-              "'/>" +
-              "<div class='place-text'>" +
-              "<h2>" +
-              "<a href='" +
-              place.url +
-              "'>" +
-              place.place +
-              "</a>" +
-              "</h2>" +
-              "<address class='place-location'>" +
-              place.location +
-              "</address>" +
-              "<p>" +
-              place.description +
-              "</p>" +
-              `<button aria-label='Favorite' class='fave-btn' aria-pressed='${place.favorite}'>${icon}</button>` +
-              "</div>" +
+                "<img alt='' src='" +
+                  place.img +
+                "'/>" +
+                "<div class='place-text'>" +
+                  "<h2>" +
+                    "<a href='" +
+                    place.url +
+                    "'>" +
+                      place.place +
+                    "</a>" +
+                  "</h2>" +
+                  "<address class='place-location'>" +
+                    place.location +
+                  "</address>" +
+                  "<p>" +
+                    place.description +
+                  "</p>" +
+                  "<button aria-label='Favorite " +
+                    place.place +
+                    "' data-fave='" +
+                    place.id +
+                    "' class='fave-btn' aria-pressed='" +
+                    favorited +
+                  "'>" +
+                    icon +
+                  "</button>" +
+                "</div>" +
               "</article>"
             );
           })
@@ -111,61 +104,42 @@ tags: project
     app.data.error = "Sorry something went wrong with our API.";
   }
 
-  function updateData(response) {
+  function getPlaces(response) {
     app.data.places = response;
-    return response;
+  }
+
+  function getFavorites() {
+    let storedData = localStorage.getItem(storageID);
+    app.data.favorites = storedData ? JSON.parse(storedData) : {};
+  }
+
+  function saveFavorites(favorites) {
+    localStorage.setItem(storageID, JSON.stringify(favorites));
   }
 
   function clickHandler(event) {
-    if (event.target.closest("button")) {
-      let place = event.target.closest("article");
-      if (
-        event.target.closest("button").getAttribute("aria-pressed") === "false"
-      ) {
-        favorite(place, true);
-      } else {
-        favorite(place, false);
-      }
-    }
+    let button = event.target.closest("button");
+    var place = button.getAttribute("data-fave");
+    if (!place) return;
+
+    app.data.favorites[place] = app.data.favorites[place] ? false : true;
+
+    saveFavorites(app.data.favorites);
   }
 
-  function favorite(place, value) {
-    let placeID = place.id;
-    let favoritedPlaces = app.data.places.map(function (place) {
-      if (!place.id) {
-        return;
-      }
-      if (place.id === placeID) {
-        place.favorite = value;
-      } else {
-        place.favorite = place.favorite;
-      }
-      return place;
-    });
-
-    console.log("app.data.places", app.data.places);
-    console.log("favoritedPlaces", favoritedPlaces);
-
-    app.data.places = favoritedPlaces;
-    storeData(favoritedPlaces);
-  }
-
-  function storeData(data) {
-    let storedData = {
-      data: data
-    };
-
-    localStorage.setItem(storageID, JSON.stringify(storedData));
+  function fetchData() {
+    fetch("https://vanillajsacademy.com/api/places.json")
+      .then(checkResponse)
+      .then(getPlaces)
+      .then(getFavorites)
+      .catch(handleError);
   }
 
   // Events/Inits
   // Fetch data from the api
-  fetch("https://vanillajsacademy.com/api/places.json")
-    .then(checkResponse)
-    .then(updateData)
-    .catch(handleError);
-
+  fetchData();
   // Handle favoriting
   document.addEventListener("click", clickHandler);
 })();
+
 </script>
