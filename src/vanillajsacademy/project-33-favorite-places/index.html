@@ -119,6 +119,7 @@ tags: project
 
   function clickHandler(event) {
     let button = event.target.closest("button");
+    if (!button) return;
     var place = button.getAttribute("data-fave");
     if (!place) return;
 

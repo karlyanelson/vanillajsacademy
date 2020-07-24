@@ -1,0 +1,278 @@
+---
+layout: layout_project.njk
+title: "Project 34: Filtered Places"
+tags: project
+---
+<style>
+  .empty {
+    font-style: italic;
+    margin: 1rem 0;
+  }
+</style>
+<main>
+    <h1>{{title}}</h1>
+    <p>Explore cool, quirky places in your own backyard.</p>
+
+    <div class="filters">
+      <strong>Filter:</strong>
+      <label>
+        <input type="radio" name="view" value="all" checked>
+        All Places
+      </label>
+
+      <label>
+        <input type="radio" name="view" value="faves">
+        Favorites
+      </label>
+
+      <label>
+        <input type="radio" name="view" value="visited">
+        Visited
+      </label>
+
+      <label>
+        <input type="radio" name="view" value="not-visited">
+        Not Visited
+      </label>
+    </div>
+
+    <div id="app">Loading...</div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/reefjs@7/dist/reef.js"></script>
+<script>
+;(function () {
+  // Variables
+  const favoriteIconOutline = `<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z"/>
+  </svg>`;
+
+  const favoriteIconFilled = `<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+  </svg>`;
+
+  const storageID = "filteredPlaces";
+
+  // Methods
+  let app = new Reef("#app", {
+    data: {},
+    template: function (props) {
+      if (props.error) {
+        return props.error;
+      }
+
+      let filteredPlaces = props.places;
+
+      if (props.filter) {
+        if (props.favorites && props.filter == "faves") {
+          filteredPlaces = props.places.filter(function (place) {
+            if (props.favorites[place.id]) {
+              return place;
+            }
+          });
+        }
+
+        if (props.visited && props.filter == "visited") {
+          filteredPlaces = props.places.filter(function (place) {
+            if (props.visited[place.id]) {
+              return place;
+            }
+          });
+        }
+
+        if (props.visited && props.filter == "not-visited") {
+          filteredPlaces = props.places.filter(function (place) {
+            if (!props.visited[place.id]) {
+              return place;
+            }
+          });
+        }
+      }
+
+      if (filteredPlaces.length === 0) {
+        let filterName = "places";
+        if (props.filter) {
+          if (props.filter == "not-visited") {
+            filterName = "places you haven't visited";
+          }
+
+          if (props.filter == "faves") {
+            filterName = "favorite places yet";
+          }
+
+          if (props.filter == "visited") {
+            filterName = "places you've visited yet";
+          }
+        }
+
+        return (
+          "<div class='empty'>You don't have any " + filterName + ".</div>"
+        );
+      }
+
+      return (
+        "<div class='places'>" +
+        filteredPlaces.map(renderPlaces).join("") +
+        "</div>"
+      );
+    }
+  });
+
+  function renderPlaces(place) {
+    let favorited;
+    let visited;
+
+    if (app.data.favorites[place.id]) {
+      favorited = app.data.favorites[place.id];
+    } else {
+      favorited = false;
+    }
+
+    if (app.data.visited[place.id]) {
+      visited = app.data.visited[place.id];
+    } else {
+      visited = false;
+    }
+
+    let faveIcon = favoriteIconOutline;
+
+    if (favorited) {
+      faveIcon = favoriteIconFilled;
+    }
+
+    let visitIcon = favoriteIconOutline;
+
+    if (visited) {
+      visitIcon = favoriteIconFilled;
+    }
+
+    return (
+      "<article id='" +
+      place.id +
+      "'/>" +
+      "<img alt='' src='" +
+      place.img +
+      "'/>" +
+      "<div class='place-text'>" +
+      "<h2>" +
+      "<a href='" +
+      place.url +
+      "'>" +
+      place.place +
+      "</a>" +
+      "</h2>" +
+      "<address class='place-location'>" +
+      place.location +
+      "</address>" +
+      "<p>" +
+      place.description +
+      "</p>" +
+      "<button aria-label='Favorite " +
+      place.place +
+      "' data-fave='" +
+      place.id +
+      "' class='fave-btn' aria-pressed='" +
+      favorited +
+      "'>" +
+      faveIcon +
+      "Favorite </button>" +
+      "<button data-visit='" +
+      place.id +
+      "' class='visit-btn' aria-pressed='" +
+      visited +
+      "'>" + visitIcon + "Visited</button>" +
+      "</div>" +
+      "</article>"
+    );
+  }
+
+  function checkResponse(response) {
+    if (response.ok) {
+      return response.json();
+    } else {
+      return Promise.reject(response);
+    }
+  }
+
+  function handleError(error) {
+    console.warn("Something went wrong:", error);
+    app.data.error = "Sorry something went wrong with our API.";
+  }
+
+  function getPlaces(response) {
+    app.data.places = response;
+  }
+
+  function getFavorites() {
+    let storedData = localStorage.getItem(storageID);
+    app.data.favorites = storedData ? JSON.parse(storageID + "-favorites") : {};
+  }
+
+  function saveFavorites(favorites) {
+    localStorage.setItem(storageID + "-favorites", JSON.stringify(favorites));
+  }
+
+  function getVisited() {
+    let storedData = localStorage.getItem(storageID + "-visited");
+    app.data.visited = storedData ? JSON.parse(storedData) : {};
+  }
+
+  function saveVisited(visited) {
+    localStorage.setItem(storageID + "-visited", JSON.stringify(visited));
+  }
+
+  function clickHandler(event) {
+    let button = event.target.closest("button");
+    if (!button) {
+      return;
+    }
+    var favePlace = button.getAttribute("data-fave");
+    var visitedPlace = button.getAttribute("data-visit");
+
+    if (!favePlace && !visitedPlace) return;
+
+    if (favePlace) {
+      app.data.favorites[favePlace] = app.data.favorites[favePlace]
+        ? false
+        : true;
+
+      saveFavorites(app.data.favorites);
+    }
+
+    if (visitedPlace) {
+      app.data.visited[visitedPlace] = app.data.visited[visitedPlace]
+        ? false
+        : true;
+
+      saveVisited(app.data.visited);
+    }
+  }
+
+  function filterHandler(event) {
+    if (!event.target.matches('[type="radio"]')) {
+      return;
+    }
+    app.data.filter = event.target.value;
+  }
+
+  function fetchData() {
+    fetch("https://vanillajsacademy.com/api/places.json")
+      .then(checkResponse)
+      .then(getPlaces)
+      .then(getFavorites)
+      .then(getVisited)
+      .catch(handleError);
+  }
+
+  // Events/Inits
+  // Fetch data from the api
+  fetchData();
+  // Handle favoriting
+  document.addEventListener("click", clickHandler);
+  document.addEventListener("input", filterHandler);
+})();
+
+
+</script>
