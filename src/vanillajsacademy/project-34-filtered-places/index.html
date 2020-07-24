@@ -42,6 +42,27 @@ tags: project
 <script src="https://cdn.jsdelivr.net/npm/reefjs@7/dist/reef.js"></script>
 <script>
 ;(function () {
+  //polyfills
+  /**
+  * Element.closest() polyfill
+  * https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
+  */
+  if (!Element.prototype.closest) {
+    if (!Element.prototype.matches) {
+      Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+    }
+    Element.prototype.closest = function (s) {
+      var el = this;
+      var ancestor = this;
+      if (!document.documentElement.contains(el)) return null;
+      do {
+        if (ancestor.matches(s)) return ancestor;
+        ancestor = ancestor.parentElement;
+      } while (ancestor !== null);
+      return null;
+    };
+  }
+
   // Variables
   const favoriteIconOutline = `<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24">
     <path d="M0 0h24v24H0z" fill="none"/>
@@ -54,6 +75,9 @@ tags: project
   </svg>`;
 
   const storageID = "filteredPlaces";
+
+  const favoritesStorageID = "favoritePlaces";
+  const visitedStorageID = "visitedPlaces";
 
   // Methods
   let app = new Reef("#app", {
@@ -150,40 +174,40 @@ tags: project
 
     return (
       "<article id='" +
-      place.id +
+        place.id +
       "'/>" +
       "<img alt='' src='" +
-      place.img +
+        place.img +
       "'/>" +
-      "<div class='place-text'>" +
-      "<h2>" +
-      "<a href='" +
-      place.url +
-      "'>" +
-      place.place +
-      "</a>" +
-      "</h2>" +
-      "<address class='place-location'>" +
-      place.location +
-      "</address>" +
-      "<p>" +
-      place.description +
-      "</p>" +
-      "<button aria-label='Favorite " +
-      place.place +
-      "' data-fave='" +
-      place.id +
-      "' class='fave-btn' aria-pressed='" +
-      favorited +
-      "'>" +
-      faveIcon +
-      "Favorite </button>" +
-      "<button data-visit='" +
-      place.id +
-      "' class='visit-btn' aria-pressed='" +
-      visited +
-      "'>" + visitIcon + "Visited</button>" +
-      "</div>" +
+        "<div class='place-text'>" +
+          "<h2>" +
+            "<a href='" +
+              place.url +
+            "'>" +
+              place.place +
+            "</a>" +
+          "</h2>" +
+          "<address class='place-location'>" +
+            place.location +
+          "</address>" +
+          "<p>" +
+            place.description +
+          "</p>" +
+          "<button data-type='favorites' data-id='" +
+            place.id +
+          "' class='fave-btn' aria-pressed='" +
+            favorited +
+          "'>" + "<span>" +
+            faveIcon + "</span>" +
+          "<span>Favorite</span></button>" +
+          "<button data-type='visited' data-id='" +
+            place.id +
+            "' class='visit-btn' aria-pressed='" +
+            visited +
+            "'>" + "<span>" +
+            visitIcon + "</span>" +
+          "<span>Visited</span></button>" +
+        "</div>" +
       "</article>"
     );
   }
@@ -201,26 +225,21 @@ tags: project
     app.data.error = "Sorry something went wrong with our API.";
   }
 
-  function getPlaces(response) {
+  function setData(response) {
     app.data.places = response;
+    app.data.favorites = getFromStorage(favoritesStorageID);
+    app.data.visited = getFromStorage(visitedStorageID);
+    app.data.filter = "all";
   }
 
-  function getFavorites() {
-    let storedData = localStorage.getItem(storageID);
-    app.data.favorites = storedData ? JSON.parse(storageID + "-favorites") : {};
+  function getFromStorage(id) {
+    let storedData = localStorage.getItem(id);
+    let storedDataObject = storedData ? JSON.parse(storedData) : {}
+    return storedDataObject;
   }
-
-  function saveFavorites(favorites) {
-    localStorage.setItem(storageID + "-favorites", JSON.stringify(favorites));
-  }
-
-  function getVisited() {
-    let storedData = localStorage.getItem(storageID + "-visited");
-    app.data.visited = storedData ? JSON.parse(storedData) : {};
-  }
-
-  function saveVisited(visited) {
-    localStorage.setItem(storageID + "-visited", JSON.stringify(visited));
+  
+  function saveToStorage(items, id) {
+    localStorage.setItem(id, JSON.stringify(items));
   }
 
   function clickHandler(event) {
@@ -228,51 +247,45 @@ tags: project
     if (!button) {
       return;
     }
-    var favePlace = button.getAttribute("data-fave");
-    var visitedPlace = button.getAttribute("data-visit");
+    let type = button.getAttribute("data-type");
+    let id = button.getAttribute("data-id");
 
-    if (!favePlace && !visitedPlace) return;
+    if (!type && !id) return;
 
-    if (favePlace) {
-      app.data.favorites[favePlace] = app.data.favorites[favePlace]
-        ? false
-        : true;
+    app.data[type][id] = app.data[type][id] ? false : true;
 
-      saveFavorites(app.data.favorites);
-    }
-
-    if (visitedPlace) {
-      app.data.visited[visitedPlace] = app.data.visited[visitedPlace]
-        ? false
-        : true;
-
-      saveVisited(app.data.visited);
-    }
   }
 
   function filterHandler(event) {
-    if (!event.target.matches('[type="radio"]')) {
+    if (!event.target.closest('.filters')) {
       return;
     }
     app.data.filter = event.target.value;
   }
 
+  function renderHandler(event) {
+    saveToStorage(app.data.favorites, favoritesStorageID);
+    saveToStorage(app.data.visited, visitedStorageID);
+  }
+
   function fetchData() {
     fetch("https://vanillajsacademy.com/api/places.json")
       .then(checkResponse)
-      .then(getPlaces)
-      .then(getFavorites)
-      .then(getVisited)
+      .then(setData)
       .catch(handleError);
   }
 
   // Events/Inits
   // Fetch data from the api
   fetchData();
+
   // Handle favoriting
   document.addEventListener("click", clickHandler);
+
+  // Handle filtering
   document.addEventListener("input", filterHandler);
+
+  // Handle saving to localstorage every time the page data changes
+  document.addEventListener("render", renderHandler);
 })();
-
-
 </script>

@@ -148,6 +148,12 @@ button {
     color: rgb(var(--color-bg));
     padding: .5rem 1rem;
     border: 2px solid rgb(var(--color-action));
+    display: inline-flex;
+    align-items: center;
+}
+
+button span + span {
+    margin-left: .25rem; 
 }
 
 button:hover,
