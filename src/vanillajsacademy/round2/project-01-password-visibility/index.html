@@ -31,4 +31,17 @@ tags: [project, round2]
   </form>
 </main>
 
-<script></script>
+<script>
+  const showPasswordCheckBox = document.querySelector("#show-password");
+  const passwordInput = document.querySelector("#password");
+
+  if (showPasswordCheckBox) {
+    showPasswordCheckBox.addEventListener("change", function (event) {
+      if (event.target.checked) {
+        passwordInput.type = "text";
+      } else {
+        passwordInput.type = "password";
+      }
+    });
+  }
+</script>
