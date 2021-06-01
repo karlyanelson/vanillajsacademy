@@ -1,0 +1,85 @@
+---
+layout: layout_project.njk
+title: "Round 1, Project 32: Places"
+tags: [project, round1]
+---
+
+<main>
+  <h1>{{title}}</h1>
+  <p>Explore cool, quirky places in your own backyard.</p>
+  <div id="app">Loading...</div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/reefjs@7/dist/reef.js"></script>
+<script>
+  (function () {
+    // Methods
+    let app = new Reef("#app", {
+      data: {
+        places: [],
+      },
+      template: function (props) {
+        if (app.data.error) {
+          return app.data.error;
+        }
+        return (
+          "<div>" +
+          props.places
+            .map(function (place) {
+              return (
+                "<article id='" +
+                place.id +
+                "'/>" +
+                "<img alt='' src='" +
+                place.img +
+                "'/>" +
+                "<div>" +
+                "<h2>" +
+                "<a href='" +
+                place.url +
+                "'>" +
+                place.place +
+                "</a>" +
+                "</h2>" +
+                "<address>" +
+                place.location +
+                "</address>" +
+                "<p>" +
+                place.description +
+                "</p>" +
+                "</div>" +
+                "</article>"
+              );
+            })
+            .join("") +
+          "</div>"
+        );
+      },
+    });
+
+    function checkResponse(response) {
+      if (response.ok) {
+        return response.json();
+      } else {
+        return Promise.reject(response);
+      }
+    }
+
+    function handleError(error) {
+      console.warn("Something went wrong:", error);
+      app.data.error = "Sorry something went wrong with our API.";
+    }
+
+    function updateData(response) {
+      app.data.places = response;
+      return response;
+    }
+
+    // Events
+    // Fetch data from the api
+    fetch("https://vanillajsacademy.com/api/places.json")
+      .then(checkResponse)
+      .then(updateData)
+      .catch(handleError);
+  })();
+</script>

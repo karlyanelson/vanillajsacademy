@@ -1,0 +1,109 @@
+---
+layout: layout_project.njk
+title: "Round 1, Project 3: Toggling Passwords in Multiple Forms"
+tags: [project, round1]
+---
+
+<main>
+  <h1>{{title}}</h1>
+
+  <h2>Change Username</h2>
+
+  <p>Enter your username and password to change your username.</p>
+
+  <form class="form-1">
+    <div>
+      <label for="username">Username</label>
+      <input type="text" name="username" id="username" />
+    </div>
+
+    <div>
+      <label for="password">Password</label>
+      <input
+        class="password"
+        type="password"
+        data-password
+        name="password"
+        id="password"
+      />
+    </div>
+
+    <div class="checkbox">
+      <input
+        type="checkbox"
+        data-pw-toggle
+        name="show-passwords"
+        id="show-password"
+      />
+      <label for="show-password">Show password</label>
+    </div>
+
+    <p>
+      <button type="submit">Change Username</button>
+    </p>
+  </form>
+
+  <h2>Change Password</h2>
+
+  <p>Enter your current password and new password below.</p>
+
+  <form class="form-2">
+    <div>
+      <label for="current-password">Current Password</label>
+      <input
+        class="password"
+        type="password"
+        data-password
+        name="current-password"
+        id="current-password"
+      />
+    </div>
+
+    <div>
+      <label for="new-password">New Password</label>
+      <input
+        class="password"
+        type="password"
+        data-password
+        name="new-password"
+        id="new-password"
+      />
+    </div>
+
+    <div class="checkbox">
+      <input
+        type="checkbox"
+        data-pw-toggle
+        name="show-passwords"
+        id="show-passwords"
+      />
+      <label for="show-passwords">Show passwords</label>
+    </div>
+
+    <p>
+      <button type="submit">Change Passwords</button>
+    </p>
+  </form>
+</main>
+
+<script>
+  // Methods
+  function togglePassword(passwordInput) {
+    passwordInput.type = event.target.checked ? "text" : "password";
+  }
+
+  function togglePasswords(event) {
+    if (!event.target.matches("[data-pw-toggle]")) {
+      return;
+    }
+
+    var form = event.target.form;
+
+    var passwords = form.querySelectorAll("[data-password]");
+
+    passwords.forEach(togglePassword);
+  }
+
+  // Events
+  document.addEventListener("change", togglePasswords);
+</script>

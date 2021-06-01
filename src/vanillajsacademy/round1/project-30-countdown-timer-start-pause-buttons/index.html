@@ -1,0 +1,160 @@
+---
+layout: layout_project.njk
+title: "Round 1, Project 30: Countdown Timer - Start and Pause Buttons"
+tags: [project, round1]
+---
+
+<style>
+  .timer p {
+    font-size: 3em;
+  }
+</style>
+
+<main class="align-center">
+  <h1>{{title}}</h1>
+  <div class="timer" aria-live="polite" id="app"></div>
+</main>
+
+<script>
+  (function () {
+    // Variables
+    const duration = 120;
+    let timer;
+
+    // Methods
+    // /**
+    // * State-based UI Component
+    // * @param {String} selector The selector for the target element
+    // * @param {Object} options  Component options
+    // */
+    const Rue = function (selector, options) {
+      this.elem = document.querySelector(selector);
+      this.data = options.data;
+      this.template = options.template;
+    };
+
+    // /**
+    //  * Render a new UI
+    //  */
+    Rue.prototype.render = function () {
+      this.elem.innerHTML = this.template(this.data);
+    };
+
+    // /**
+    //  * Create the timer component
+    //  * @param  {Object} props The component options
+    //  */
+    let app = new Rue("#app", {
+      data: {
+        time: duration,
+        paused: true,
+      },
+      template: function (props) {
+        let startOrPause = props.paused
+          ? "<button data-start>Start</button>"
+          : "<button data-pause>Pause</button>";
+        if (props.time <= 0) {
+          startOrPause = "";
+        }
+
+        return (
+          "<p>" +
+          formatTime(props.time) +
+          "</p>" +
+          "<button data-restart>Restart</button>" +
+          startOrPause
+        );
+      },
+    });
+
+    function countDown() {
+      // check if timer should be paused
+      if (app.data.paused === true) {
+        return;
+      }
+
+      // reduce by 1 second
+      app.data.time--;
+
+      // check if the timer should be stopped
+      stopTimer();
+
+      //update the ui
+      app.render();
+    }
+
+    function stopTimer() {
+      if (app.data.time > 0) return;
+      clearInterval(timer);
+    }
+
+    function pauseTimer() {
+      clearInterval(timer);
+      app.data.paused = true;
+      app.render();
+    }
+
+    function startTimer() {
+      clearInterval(timer);
+
+      if (app.data.time < 1) {
+        restartTimer();
+        return;
+      }
+      // start the countdown timer
+      app.data.paused = false;
+      app.render();
+      timer = setInterval(countDown, 1000);
+    }
+
+    function restartTimer() {
+      clearInterval(timer);
+
+      //reset to original start time
+      app.data.time = duration;
+
+      //make sure it's not paused
+      app.data.paused = false;
+
+      // render the initial ui
+      app.render();
+
+      // start the countdown timer
+      timer = setInterval(countDown, 1000);
+    }
+
+    function clickHandler(event) {
+      if (!event.target.matches("button")) {
+        return;
+      }
+
+      if (event.target.matches("[data-restart]")) {
+        restartTimer();
+      }
+
+      if (event.target.matches("[data-start]")) {
+        startTimer();
+      }
+
+      if (event.target.matches("[data-pause]")) {
+        pauseTimer();
+      }
+    }
+
+    function formatTime(time) {
+      let minutes = parseInt(time / 60, 10);
+      let seconds = time % 60;
+
+      return (
+        minutes.toString().padStart(2, "0") +
+        ":" +
+        seconds.toString().padStart(2, "0")
+      );
+    }
+
+    // Events
+    // restartTimer();
+    app.render();
+    document.addEventListener("click", clickHandler);
+  })();
+</script>

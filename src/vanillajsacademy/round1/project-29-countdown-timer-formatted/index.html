@@ -1,0 +1,113 @@
+---
+layout: layout_project.njk
+title: "Round 1, Project 29: Countdown Timer - Formatted"
+tags: [project, round1]
+---
+
+<style>
+  .timer {
+    font-size: 3em;
+  }
+</style>
+
+<main class="align-center">
+  <h1>{{title}}</h1>
+  <p class="timer" aria-live="polite" id="app"></p>
+</main>
+
+<script>
+  (function () {
+    // Variables
+    const duration = 120;
+    let timer;
+
+    // Methods
+    // /**
+    // * State-based UI Component
+    // * @param {String} selector The selector for the target element
+    // * @param {Object} options  Component options
+    // */
+    const Rue = function (selector, options) {
+      this.elem = document.querySelector(selector);
+      this.data = options.data;
+      this.template = options.template;
+    };
+
+    // /**
+    //  * Render a new UI
+    //  */
+    Rue.prototype.render = function () {
+      this.elem.innerHTML = this.template(this.data);
+    };
+
+    // /**
+    //  * Create the timer component
+    //  * @param  {Object} props The component options
+    //  */
+    let app = new Rue("#app", {
+      data: {
+        time: duration,
+      },
+      template: function (props) {
+        // if we've counted down to 0, stop and show a button to restart
+
+        if (props.time < 1) {
+          return "<button>Restart Countdown</button>";
+        }
+
+        // Otherwise, show the current time
+        return formatTime(props.time);
+      },
+    });
+
+    function countDown() {
+      // reduce by 1 second
+      app.data.time--;
+
+      // check if the timer should be stopped
+      stopTimer();
+
+      //update the ui
+      app.render();
+    }
+
+    function stopTimer() {
+      if (app.data.time > 0) return;
+      clearInterval(timer);
+    }
+
+    function startTimer() {
+      //reset to original start time
+      app.data.time = duration;
+
+      // render the initial ui
+      app.render();
+
+      // start the countdown timer
+      timer = setInterval(countDown, 1000);
+    }
+
+    function clickHandler(event) {
+      if (!event.target.matches("button")) {
+        return;
+      }
+
+      startTimer();
+    }
+
+    function formatTime(time) {
+      let minutes = parseInt(time / 60, 10);
+      let seconds = time % 60;
+
+      return (
+        minutes.toString().padStart(2, "0") +
+        ":" +
+        seconds.toString().padStart(2, "0")
+      );
+    }
+
+    // Events
+    startTimer();
+    document.addEventListener("click", clickHandler);
+  })();
+</script>

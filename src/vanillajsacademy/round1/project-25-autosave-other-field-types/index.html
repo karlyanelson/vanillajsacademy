@@ -1,0 +1,151 @@
+---
+layout: layout_project.njk
+title: "Round 1, Project 25: Autosave - Other Field Types"
+tags: [project, round1]
+---
+
+<main>
+  <h1>{{title}}</h1>
+  <form class="save-me" id="save-me">
+    <div>
+      <label for="name">Name</label>
+      <input type="text" name="name" id="name" />
+    </div>
+    <div>
+      <label for="address">Address</label>
+      <input type="text" name="address" id="address" />
+    </div>
+    <div>
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" />
+    </div>
+    <div>
+      <label for="hear-about-us">How did you hear about us?</label>
+      <select name="hear-about-us" id="hear-about-us">
+        <option value=""></option>
+        <option value="google">Google</option>
+        <option value="referral">Referred by a Friend</option>
+        <option value="tv">A TV Ad</option>
+        <option value="radio">A Radio Ad</option>
+      </select>
+    </div>
+    <div>
+      <label for="more">Additional thoughts?</label>
+      <textarea name="more" id="more"></textarea>
+    </div>
+    <div>
+      <p><strong>Do you agree to our terms of service?</strong></p>
+      <label>
+        <input type="radio" name="tos" value="yes" />
+        Yes
+      </label>
+      <label>
+        <input type="radio" name="tos" value="no" />
+        No
+      </label>
+    </div>
+
+    <p><strong>Pick your favorite super heros.</strong></p>
+
+    <div class="checkbox">
+      <input type="checkbox" name="spiderman" id="spiderman" />
+      <label for="spiderman"> Spiderman </label>
+    </div>
+    <div class="checkbox">
+      <input type="checkbox" name="wonderwoman" id="wonderwoman" />
+      <label for="wonderwoman"> Wonder Woman </label>
+    </div>
+    <div class="checkbox">
+      <input type="checkbox" name="blackpanther" id="blackpanther" />
+      <label for="blackpanther"> Black Panther </label>
+    </div>
+    <p>
+      <button type="submit">Submit</button>
+    </p>
+  </form>
+</main>
+
+<script>
+  (function () {
+    // variables
+    let form = document.querySelector("#save-me");
+    let fields = Array.prototype.slice.call(
+      form.querySelectorAll("input, textarea, select")
+    );
+
+    let storageKey = "form-autosave";
+
+    function getID(element) {
+      let id = element.id ? element.id : element.name;
+      return id;
+    }
+
+    // methods
+    function saveData(event) {
+      if (!event.target.id && !event.target.name) {
+        return;
+      }
+
+      let id = getID(event.target);
+
+      // get existing data from session storage
+      let data = sessionStorage.getItem(storageKey);
+      //if there isn't anything in sessionStorage, make a new object
+      data = data ? JSON.parse(data) : {};
+
+      if (event.target.type == "checkbox") {
+        data[id] = event.target.checked;
+      } else {
+        // Add the field to the sessionStorage object
+        data[id] = event.target.value;
+      }
+
+      // Save the object back to sessionStorage
+      sessionStorage.setItem(storageKey, JSON.stringify(data));
+    }
+
+    function loadData() {
+      let data = sessionStorage.getItem(storageKey);
+      if (!data) {
+        return;
+      }
+      data = JSON.parse(data);
+
+      fields.forEach(function (field) {
+        // if the field doesn't have an id or name, bail
+        if (!field.id && !field.name) {
+          return;
+        }
+
+        let id = getID(field);
+
+        // if the id isn't in the data object, there's no data to load ,so bail
+        if (!data[id]) {
+          return;
+        }
+
+        // Set the input value to the saved value of the data at that key/id in sessionStorage
+        if (field.type == "checkbox") {
+          field.checked = data[id];
+        } else if (field.type == "radio") {
+          data[id] === field.value
+            ? (field.checked = true)
+            : (field.checked = false);
+        } else {
+          field.value = data[id];
+        }
+      });
+    }
+
+    function clearData(event) {
+      event.preventDefault();
+      sessionStorage.removeItem(storageKey);
+      form.reset();
+    }
+
+    // events
+    loadData();
+    form.addEventListener("input", saveData, false);
+    form.addEventListener("submit", clearData, false);
+  })();
+</script>

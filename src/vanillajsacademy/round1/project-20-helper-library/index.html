@@ -1,0 +1,114 @@
+---
+layout: layout_project.njk
+title: "Round 1, Project 20: Helper Library"
+tags: [project, round1]
+---
+
+<style>
+  button {
+    padding: 0.5rem;
+    font-size: 1.5em;
+    margin: 0.5rem;
+  }
+
+  .btn-green {
+    background-color: green;
+    color: #ffffff;
+  }
+
+  .btn-purple {
+    background-color: rebeccapurple;
+    color: #ffffff;
+  }
+</style>
+
+<main class="align-center">
+  <h1>{{title}}</h1>
+  <h2>Click buttons to toggle their color</h2>
+  <div>
+    <button class="btn-green" id="button-1">Button 1</button>
+    <button class="btn-green" id="button-2">Button 2</button>
+    <button class="btn-green" id="button-3">Button 3</button>
+  </div>
+  <p aria-live="polite" role="status" data-status>The buttons are green.</p>
+</main>
+
+<script>
+  const myCoolLibrary = (function () {
+    // Variables
+    // Holds our public methods
+    let methods = {};
+
+    // Methods
+    /**
+     * Convert a nodelist into an array
+     * @param  {Nodelist} nodelist
+     * @return {Array}
+     */
+    methods.nodeToArray = function (nodelist) {
+      return Array.prototype.slice.call(nodelist);
+    };
+
+    /**
+     * Get the first matching element in the DOM
+     * @param  {String} selector - The selector for the element
+     * @return {Node} The first element with that selector
+     */
+    methods.getFirstElement = function (selector) {
+      return document.querySelector(selector);
+    };
+
+    /**
+     * Get all matching elements in the DOM as an array
+     * @param  {String} selector - The selector for the elements
+     * @return {Array} An array of those elements
+     */
+    methods.getAllElements = function (selector) {
+      let nodeList = document.querySelectorAll(selector);
+      return methods.nodeToArray(nodeList);
+    };
+
+    /**
+     * Add a class to all elements in an array
+     * @param  {String} selector - The selector for the elements
+     * @param  {String} className - The class to add to the elements
+     */
+    methods.addClass = function (selector, className) {
+      let elements = methods.nodeToArray(document.querySelectorAll(selector));
+      return elements.forEach(function (element) {
+        element.classList.add(className);
+      });
+    };
+
+    /**
+     * Remove a class from all elements in an array
+     * @param  {String} selector - The selector for the elements
+     * @param  {String} className - The class to remove from the elements
+     */
+    methods.removeClass = function (selector, className) {
+      let elements = methods.nodeToArray(document.querySelectorAll(selector));
+      return elements.forEach(function (element) {
+        element.classList.remove(className);
+      });
+    };
+
+    // Return public methods
+    return methods;
+  })();
+
+  const status = myCoolLibrary.getFirstElement("[data-status]");
+
+  document.addEventListener("click", function (event) {
+    if (!event.target.matches("button")) {
+      return;
+    }
+
+    if (event.target.matches(".btn-purple")) {
+      myCoolLibrary.removeClass("button", "btn-purple");
+      status.textContent = "The buttons are now green.";
+    } else {
+      myCoolLibrary.addClass("button", "btn-purple");
+      status.textContent = "The buttons are now purple.";
+    }
+  });
+</script>
