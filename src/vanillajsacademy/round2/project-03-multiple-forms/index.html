@@ -15,12 +15,7 @@ tags: [project, round2]
 
     <div>
       <label for="password">Password</label>
-      <input
-        type="password"
-        name="password"
-        id="password"
-        data-password="form1"
-      />
+      <input type="password" name="password" id="password" />
     </div>
 
     <div class="checkbox">
@@ -28,7 +23,7 @@ tags: [project, round2]
         type="checkbox"
         name="show-passwords"
         id="show-password"
-        data-toggle="form1"
+        data-toggle="#password"
       />
       <label for="show-password"> Show password </label>
     </div>
@@ -67,7 +62,7 @@ tags: [project, round2]
         type="checkbox"
         name="show-passwords"
         id="show-passwords"
-        data-toggle="form2"
+        data-toggle="#current-password, #new-password"
       />
       <label for="show-passwords"> Show password </label>
     </div>
@@ -79,21 +74,20 @@ tags: [project, round2]
 </main>
 
 <script>
-  let passwordInputs = document.querySelectorAll("[data-password]");
+  const togglePasswordInput = (passwordInput, checkbox) => {
+    passwordInput.type = checkbox.checked ? "text" : "password";
+  };
 
-  document.addEventListener("change", function (event) {
+  const togglePasswords = (event) => {
     if (event.target.hasAttribute("data-toggle")) {
-      let formName = event.target.getAttribute("data-toggle");
+      let inputSelector = event.target.getAttribute("data-toggle");
+      let passwordInputs = document.querySelectorAll(inputSelector);
 
       for (let input of passwordInputs) {
-        if (input.getAttribute("data-password") === formName) {
-          if (event.target.checked) {
-            input.type = "text";
-          } else {
-            input.type = "password";
-          }
-        }
+        togglePasswordInput(input, event.target);
       }
     }
-  });
+  };
+
+  document.addEventListener("change", togglePasswords);
 </script>
