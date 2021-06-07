@@ -1,0 +1,57 @@
+---
+layout: layout_project.njk
+title: "Round 2, Project 2: Toggle multiple password fields"
+tags: [project, round2]
+---
+
+<main>
+  <h1>{{title}}</h1>
+
+  <p>Enter your username and password to login.</p>
+
+  <form>
+    <div>
+      <label for="current-password">Current Password</label>
+      <input
+        type="password"
+        name="current-password"
+        id="current-password"
+        data-password
+      />
+    </div>
+
+    <div>
+      <label for="new-password">New Password</label>
+      <input
+        type="password"
+        name="new-password"
+        id="new-password"
+        data-password
+      />
+    </div>
+
+    <div class="checkbox">
+      <input type="checkbox" name="show-passwords" id="show-password" />
+      <label for="show-password"> Show password </label>
+    </div>
+
+    <p>
+      <button type="submit">Log In</button>
+    </p>
+  </form>
+</main>
+
+<script>
+  const showPasswordCheckBox = document.querySelector("#show-password");
+  const passwordInputs = document.querySelectorAll("[data-password]");
+
+  showPasswordCheckBox.addEventListener("change", function (event) {
+    for (let input of passwordInputs) {
+      if (showPasswordCheckBox.checked) {
+        input.type = "text";
+      } else {
+        input.type = "password";
+      }
+    }
+  });
+</script>

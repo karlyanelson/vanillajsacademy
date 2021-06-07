@@ -37,7 +37,7 @@ tags: [project, round2]
 
   if (showPasswordCheckBox) {
     showPasswordCheckBox.addEventListener("change", function (event) {
-      if (event.target.checked) {
+      if (showPasswordCheckBox.checked) {
         passwordInput.type = "text";
       } else {
         passwordInput.type = "password";
