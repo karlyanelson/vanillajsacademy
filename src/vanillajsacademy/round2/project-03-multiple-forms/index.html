@@ -1,17 +1,13 @@
 ---
 layout: layout_project.njk
-title: "Round 1 | Project 3: Toggling Passwords in Multiple Forms"
-tags: [project, round1]
+title: "Round 2 | Project 3: Toggle password visibility in multiple forms"
+tags: [project, round2]
 ---
 
 <main>
   <h1>{{title}}</h1>
 
-  <h2>Change Username</h2>
-
-  <p>Enter your username and password to change your username.</p>
-
-  <form class="form-1">
+  <form>
     <div>
       <label for="username">Username</label>
       <input type="text" name="username" id="username" />
@@ -20,22 +16,21 @@ tags: [project, round1]
     <div>
       <label for="password">Password</label>
       <input
-        class="password"
         type="password"
-        data-password
         name="password"
         id="password"
+        data-password="form1"
       />
     </div>
 
     <div class="checkbox">
       <input
         type="checkbox"
-        data-pw-toggle
         name="show-passwords"
         id="show-password"
+        data-toggle="form1"
       />
-      <label for="show-password">Show password</label>
+      <label for="show-password"> Show password </label>
     </div>
 
     <p>
@@ -44,40 +39,37 @@ tags: [project, round1]
   </form>
 
   <h2>Change Password</h2>
-
   <p>Enter your current password and new password below.</p>
 
-  <form class="form-2">
+  <form>
     <div>
       <label for="current-password">Current Password</label>
       <input
-        class="password"
         type="password"
-        data-password
         name="current-password"
         id="current-password"
+        data-password="form2"
       />
     </div>
 
     <div>
       <label for="new-password">New Password</label>
       <input
-        class="password"
         type="password"
-        data-password
         name="new-password"
         id="new-password"
+        data-password="form2"
       />
     </div>
 
     <div class="checkbox">
       <input
         type="checkbox"
-        data-pw-toggle
         name="show-passwords"
         id="show-passwords"
+        data-toggle="form2"
       />
-      <label for="show-passwords">Show passwords</label>
+      <label for="show-passwords"> Show password </label>
     </div>
 
     <p>
@@ -87,23 +79,21 @@ tags: [project, round1]
 </main>
 
 <script>
-  // Methods
-  function togglePassword(passwordInput) {
-    passwordInput.type = event.target.checked ? "text" : "password";
-  }
+  let passwordInputs = document.querySelectorAll("[data-password]");
 
-  function togglePasswords(event) {
-    if (!event.target.matches("[data-pw-toggle]")) {
-      return;
+  document.addEventListener("change", function (event) {
+    if (event.target.hasAttribute("data-toggle")) {
+      let formName = event.target.getAttribute("data-toggle");
+
+      for (let input of passwordInputs) {
+        if (input.getAttribute("data-password") === formName) {
+          if (event.target.checked) {
+            input.type = "text";
+          } else {
+            input.type = "password";
+          }
+        }
+      }
     }
-
-    var form = event.target.form;
-
-    var passwords = form.querySelectorAll("[data-password]");
-
-    passwords.forEach(togglePassword);
-  }
-
-  // Events
-  document.addEventListener("change", togglePasswords);
+  });
 </script>
