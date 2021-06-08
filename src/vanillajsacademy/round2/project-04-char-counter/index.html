@@ -19,6 +19,7 @@ tags: [project, round2]
 </main>
 
 <script>
+  const textArea = document.querySelector("#text");
   const charCounter = document.querySelector("#character-counter");
 
   const countCharacters = (event) => {
@@ -31,5 +32,5 @@ tags: [project, round2]
     charCounter.textContent = count + " characters";
   };
 
-  document.addEventListener("input", countCharacters);
+  textArea.addEventListener("input", countCharacters);
 </script>
