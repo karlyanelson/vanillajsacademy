@@ -23,10 +23,6 @@ tags: [project, round2]
   const charCounter = document.querySelector("#character-counter");
 
   const countCharacters = (event) => {
-    if (!event.target.matches("#text")) {
-      return;
-    }
-
     let count = event.target.value.length;
 
     charCounter.textContent = count + " characters";
