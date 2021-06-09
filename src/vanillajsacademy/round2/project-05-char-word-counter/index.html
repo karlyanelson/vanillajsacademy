@@ -42,12 +42,10 @@ tags: [project, round2]
     let wordCountText =
       wordCount !== 1 ? `${wordCount} words` : `${wordCount} word`;
 
-    // const countText = `<span>You've written <strong><span>${wordCount}</span> words</strong> and
-    // <strong><span>${charCount}</span> characters</strong>.</span>`;
+    const countText = `<span>You've written <strong>${wordCountText}</strong> and
+    <strong>${charCountText}</strong>.</span>`;
 
-    const countText = `You've written ${wordCountText} and ${charCountText}.`;
-
-    counterText.textContent = countText;
+    counterText.innerHTML = countText;
   };
 
   textArea.addEventListener("input", updateCount);
