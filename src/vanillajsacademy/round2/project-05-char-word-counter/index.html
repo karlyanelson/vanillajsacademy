@@ -18,17 +18,15 @@ tags: [project, round2]
 
 <script>
   const textArea = document.querySelector("#text");
-  const charCounter = document.querySelector("#character-count");
-  const wordCounter = document.querySelector("#word-count");
   const counterText = document.querySelector("#counterText");
 
   const findWords = (item) => {
-    return item !== "";
+    return item.length;
   };
 
   const countWords = () => {
     let text = textArea.value;
-    let words = text.split(/\s+/);
+    let words = text.split(/[\s]+/g);
     return words.filter(findWords).length;
   };
 
