@@ -4,8 +4,40 @@ title: "Round 2 | Project 7: Random Ron"
 tags: [project, round2]
 ---
 
+<style>
+  .moving-img {
+    display: block;
+  }
+
+  .still-img {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .moving-img {
+      display: none;
+    }
+
+    .still-img {
+      display: block;
+    }
+  }
+</style>
+
 <main>
   <h1>{{title}}</h1>
+
+  <img
+    class="moving-img"
+    src="https://media.giphy.com/media/d7qFTitBNU9kk/giphy.gif"
+    alt="Ron Swanson overlayed on top of the American flag."
+  />
+
+  <img
+    class="still-img"
+    src="https://static.parade.com/wp-content/uploads/2013/10/tv-show-best-boss-ron-swanson.jpg"
+    alt="Ron Swanson."
+  />
 
   <blockquote aria-live="polite">Loading...</blockquote>
 
