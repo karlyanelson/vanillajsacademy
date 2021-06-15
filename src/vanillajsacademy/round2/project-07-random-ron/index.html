@@ -1,0 +1,45 @@
+---
+layout: layout_project.njk
+title: "Round 2 | Project 7: Random Ron"
+tags: [project, round2]
+---
+
+<main>
+  <h1>{{title}}</h1>
+
+  <blockquote aria-live="polite">Loading...</blockquote>
+
+  <p>
+    <button id="get-quote">More Ron</button>
+  </p>
+</main>
+
+<script>
+  const quoteArea = document.querySelector("blockquote");
+  const button = document.querySelector("button");
+  const endpoint = "https://ron-swanson-quotes.herokuapp.com/v2/quotes";
+
+  const handleResponse = (response) => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      throw response.json();
+    }
+  };
+
+  const showQuote = (data) => {
+    quoteArea.textContent = data[0];
+  };
+
+  const handleError = (error) => {
+    console.error("Something went wrong:", error);
+  };
+
+  const giveMeAllTheBaconAndEggsYouHave = () => {
+    fetch(endpoint).then(handleResponse).then(showQuote).catch(handleError);
+  };
+
+  giveMeAllTheBaconAndEggsYouHave();
+
+  button.addEventListener("click", giveMeAllTheBaconAndEggsYouHave);
+</script>
