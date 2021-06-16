@@ -65,6 +65,9 @@ tags: [project, round2]
 
   const handleError = (error) => {
     console.error("Something went wrong:", error);
+    quoteArea.textContent =
+      "Something went wrong getting your quote. Please refresh the page and try again.";
+    quoteArea.classList.add("error");
   };
 
   const giveMeAllTheBaconAndEggsYouHave = () => {
