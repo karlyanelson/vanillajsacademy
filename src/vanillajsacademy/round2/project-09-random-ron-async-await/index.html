@@ -1,6 +1,6 @@
 ---
 layout: layout_project.njk
-title: "Round 2 | Project 9: Random Ron - using async/await"
+title: "Round 2 | Project 8: Random Ron - No Duplicates"
 tags: [project, round2]
 ---
 
@@ -51,6 +51,14 @@ tags: [project, round2]
   const button = document.querySelector("button");
   const endpoint = "https://ron-swanson-quotes.herokuapp.com/v2/quotes";
 
+  const handleResponse = (response) => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      throw response.json();
+    }
+  };
+
   let last50quotes = [];
 
   const showQuote = (data) => {
@@ -74,20 +82,8 @@ tags: [project, round2]
     quoteArea.classList.add("error");
   };
 
-  const giveMeAllTheBaconAndEggsYouHave = async () => {
-    try {
-      let response = await fetch(endpoint);
-
-      if (!response.ok) {
-        throw "Response failed. Status: " + response.status;
-      }
-
-      let data = await response.json();
-
-      showQuote(data);
-    } catch (error) {
-      handleError(error);
-    }
+  const giveMeAllTheBaconAndEggsYouHave = () => {
+    fetch(endpoint).then(handleResponse).then(showQuote).catch(handleError);
   };
 
   giveMeAllTheBaconAndEggsYouHave();
