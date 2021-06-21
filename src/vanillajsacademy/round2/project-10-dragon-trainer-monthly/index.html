@@ -1,0 +1,65 @@
+---
+layout: layout_project.njk
+title: "Round 2 | Project 10: Dragon Trainer Monthly"
+tags: [project, round2]
+---
+
+<style>
+  address {
+    display: inline-block;
+  }
+
+  .byline {
+    font-style: italic;
+  }
+</style>
+
+<main>
+  <h1>{{title}}</h1>
+
+  <div id="app">Loading Dragon Trainer Monthly articles...</div>
+</main>
+
+<script>
+  const app = document.querySelector("#app");
+  const endpoint = "https://vanillajsacademy.com/api/dragons.json";
+
+  const articleLayout = ({ title, author, article, pubdate, url }) => {
+    return `
+    <article>
+      <header>
+        <h2><a href="${url}">${title}</a></h2>
+        <div class="byline"><address>By ${author}</address> on <time pubdate>${pubdate}</time></div>
+      </header>
+      <p>${article}</p>
+    </article>`;
+  };
+
+  const showArticles = (articles) => {
+    app.innerHTML = articles.map(articleLayout).join("");
+  };
+
+  const fetchDragons = async () => {
+    try {
+      let response = await fetch(endpoint);
+
+      if (!response.ok) {
+        throw "Response failed. Status: " + response.status;
+      }
+
+      let data = await response.json();
+
+      if (!data) throw "No data";
+
+      console.log(data);
+
+      showArticles(data.articles);
+    } catch (error) {
+      console.error("Something went wrong:", error);
+      app.textContent =
+        "Something went wrong getting your articles. Please refresh the page and try again.";
+    }
+  };
+
+  fetchDragons();
+</script>
