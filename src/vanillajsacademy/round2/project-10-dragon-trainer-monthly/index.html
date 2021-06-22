@@ -24,6 +24,11 @@ tags: [project, round2]
   const app = document.querySelector("#app");
   const endpoint = "https://vanillajsacademy.com/api/dragons.json";
 
+  const showError = (error) => {
+    app.textContent =
+      "Something went wrong getting your articles. Please refresh the page and try again.";
+  };
+
   const articleLayout = ({ title, author, article, pubdate, url }) => {
     return `
     <article>
@@ -36,6 +41,11 @@ tags: [project, round2]
   };
 
   const showArticles = (articles) => {
+    if (!articles || !articles.length) {
+      showError();
+      throw new Error(`No articles. (articles.length: ${articles?.length})`);
+      return;
+    }
     app.innerHTML = articles.map(articleLayout).join("");
   };
 
@@ -44,20 +54,19 @@ tags: [project, round2]
       let response = await fetch(endpoint);
 
       if (!response.ok) {
-        throw "Response failed. Status: " + response.status;
+        throw new Error("Response failed. Status: " + response.status);
       }
 
       let data = await response.json();
 
-      if (!data) throw "No data";
-
-      console.log(data);
+      if (!data) {
+        throw new Error("No data");
+      }
 
       showArticles(data.articles);
     } catch (error) {
-      console.error("Something went wrong:", error);
-      app.textContent =
-        "Something went wrong getting your articles. Please refresh the page and try again.";
+      throw new Error(error);
+      showError();
     }
   };
 
