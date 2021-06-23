@@ -1,6 +1,8 @@
 ---
 layout: layout_project.njk
-title: "Round 1 | Project 31: Countdown Timer - Reactive Data"
+round: "1"
+number: "31"
+title: "Countdown Timer - Reactive Data"
 tags: [project, round1]
 ---
 
@@ -11,7 +13,8 @@ tags: [project, round1]
 </style>
 
 <main class="text-center">
-  <h1>{{title}}</h1>
+  <p class="project-metadata">Round {{round}} • Project {{number}}</p>
+  <h1 class="project-title">{{title}}</h1>
   <div class="timer" aria-live="polite" id="app"></div>
 </main>
 

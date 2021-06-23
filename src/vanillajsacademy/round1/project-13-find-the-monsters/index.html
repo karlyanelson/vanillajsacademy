@@ -1,11 +1,14 @@
 ---
 layout: layout_project.njk
-title: "Round 1 | Project 13: Find the Monsters"
+round: "1"
+number: "13"
+title: "Find the Monsters"
 tags: [project, round1]
 ---
 
 <main>
-  <h1>{{title}}</h1>
+  <p class="project-metadata">Round {{round}} • Project {{number}}</p>
+  <h1 class="project-title">{{title}}</h1>
   <p>Click a door to reveal a monster. Try not to find the sock.</p>
   <div id="app" aria-live="polite">
     <p>Loading...</p>

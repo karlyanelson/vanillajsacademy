@@ -28,9 +28,12 @@ layout: layout_base.njk
     </a>
   </p>
 
-  <ol>
+  <ol class="project-list">
     {%- for project in collections.round2 -%}
-    <li><a href="{{ project.url }}">{{ project.data.title }}</a></li>
+    <li>
+      <a href="{{ project.url }}">{{ project.data.title }}</a>
+      <p>Round {{project.data.round}} • Project {{project.data.number}}</p>
+    </li>
     {%- endfor -%}
   </ol>
 
@@ -56,9 +59,12 @@ layout: layout_base.njk
     </a>
   </p>
 
-  <ol>
+  <ol class="project-list">
     {%- for project in collections.round1 -%}
-    <li><a href="{{ project.url }}">{{ project.data.title }}</a></li>
+    <li>
+      <a href="{{ project.url }}"> {{ project.data.title }} </a>
+      <p>Round {{project.data.round}} • Project {{project.data.number}}</p>
+    </li>
     {%- endfor -%}
   </ol>
 </main>

@@ -1,6 +1,8 @@
 ---
 layout: layout_project.njk
-title: "Round 1 | Project 20: Helper Library"
+round: "1"
+number: "20"
+title: "Helper Library"
 tags: [project, round1]
 ---
 
@@ -23,7 +25,8 @@ tags: [project, round1]
 </style>
 
 <main class="text-center">
-  <h1>{{title}}</h1>
+  <p class="project-metadata">Round {{round}} • Project {{number}}</p>
+  <h1 class="project-title">{{title}}</h1>
   <h2>Click buttons to toggle their color</h2>
   <div>
     <button class="btn-green" id="button-1">Button 1</button>
