@@ -1,0 +1,136 @@
+---
+layout: layout_project.njk
+round: "2"
+number: "12"
+title: "Sanitize the Dragon Trainer Monthly API data"
+tags: [project, round2]
+---
+
+<style>
+  address {
+    display: inline-block;
+  }
+
+  .byline,
+  .bio {
+    font-style: italic;
+  }
+
+  .bio {
+    font-size: 0.75em;
+    opacity: 0.8;
+  }
+</style>
+
+<main>
+  <p class="project-metadata">Round {{round}} • Project {{number}}</p>
+  <h1 class="project-title">{{title}}</h1>
+
+  <div id="app">Loading Dragon Trainer Monthly articles...</div>
+</main>
+
+<script>
+  /**
+   * Sanitize and encode all HTML in a user-submitted string
+   * https://portswigger.net/web-security/cross-site-scripting/preventing
+   * @param  {String} str  The user-submitted string
+   * @return {String} str  The sanitized string
+   */
+  function sanitizeHTML(str) {
+    return str
+      .replace(/javascript:/gi, "")
+      .replace(/[^\w-_. ]/gi, function (c) {
+        return `&#${c.charCodeAt(0)};`;
+      });
+  }
+
+  const app = document.querySelector("#app");
+  const articlesEndpoint = "https://vanillajsacademy.com/api/dragons.json";
+  const authorsEndpoint =
+    "https://vanillajsacademy.com/api/dragons-authors.json";
+
+  const showError = (error) => {
+    app.textContent =
+      "Something went wrong getting your articles. Please refresh the page and try again.";
+  };
+
+  const articleLayout = ({ title, author, article, pubdate, url, bio }) => {
+    return `
+    <article>
+      <header>
+        <h2><a href="${sanitizeHTML(url)}">${sanitizeHTML(title)}</a></h2>
+        <div class="byline">By <address>${sanitizeHTML(
+          author
+        )}</address> on <time pubdate>${sanitizeHTML(pubdate)}</time></div>
+        ${sanitizeHTML(bio) && `<p class="bio">${sanitizeHTML(bio)}</p>`}
+      </header>
+      <p>${sanitizeHTML(article)}</p>
+    </article>`;
+  };
+
+  const showArticles = (articles) => {
+    app.innerHTML = articles.map(articleLayout).join("");
+  };
+
+  const fetchDragons = async () => {
+    try {
+      let responses = await Promise.all([
+        fetch(articlesEndpoint),
+        fetch(authorsEndpoint),
+      ]);
+
+      responses.forEach((response) => {
+        if (!response.ok) {
+          throw new Error("Response failed. Status: " + response.status);
+        }
+      });
+
+      let data = await Promise.all(
+        responses.map(function (response) {
+          return response.json();
+        })
+      );
+
+      if (!data) {
+        throw new Error("No data");
+      }
+
+      const combinedData = { ...data[0], ...data[1] };
+
+      if (!combinedData.articles || !combinedData.articles.length) {
+        showError();
+        throw new Error(
+          `No articles. (articles.length: ${combinedData.articles?.length})`
+        );
+        return;
+      }
+
+      if (!combinedData.authors || !combinedData.authors.length) {
+        console.warn(
+          new Error(
+            `No authors. (authors.length: ${combinedData.authors?.length})`
+          )
+        );
+      }
+
+      let articles = combinedData.articles.map((article) => {
+        if (combinedData.authors?.length) {
+          let articleAuthor = combinedData.authors.find((author) => {
+            return author.author === article.author;
+          });
+
+          return { ...article, bio: articleAuthor.bio };
+        } else {
+          return article;
+        }
+      });
+
+      showArticles(articles);
+    } catch (error) {
+      showError();
+      throw new Error(error);
+    }
+  };
+
+  fetchDragons();
+</script>
