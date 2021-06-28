@@ -111,9 +111,9 @@ tags: [project, round1]
 
   function buildMonsterGrid(monster) {
     return (
-      '<li aria-live="polite" class="grid-cell"><button id="doorBtn"><img alt="" src="../assets/monsters/door.svg"/>Open the Door</button><img hidden class="monster" alt="' +
+      '<li aria-live="polite" class="grid-cell"><button id="doorBtn"><img alt="" src="../../assets/monsters/door.svg"/>Open the Door</button><img hidden class="monster" alt="' +
       monster.alt +
-      '" src="../assets/monsters/' +
+      '" src="../../assets/monsters/' +
       monster.image +
       '"/></li>'
     );
@@ -142,7 +142,7 @@ tags: [project, round1]
 
   function youLose() {
     app.innerHTML =
-      '<img class="monster-socks" alt="" src="../assets/monsters/sock.svg" />' +
+      '<img class="monster-socks" alt="" src="../../assets/monsters/sock.svg" />' +
       '<h2>Ah! A pair of socks! <span aria-label="twenty three nineteen">2319<span>!</h2>' +
       '<button id="playAgainBtn">Play Again</button>';
   }

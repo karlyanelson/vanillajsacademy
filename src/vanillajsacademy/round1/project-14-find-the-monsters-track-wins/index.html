@@ -122,7 +122,7 @@ tags: [project, round1]
       '<button data-monster-id="' +
       index +
       '">' +
-      '<img alt="" src="../assets/monsters/door.svg"/>' +
+      '<img alt="" src="../../assets/monsters/door.svg"/>' +
       "Open Door " +
       (index + 1) +
       "</button>" +
@@ -149,7 +149,7 @@ tags: [project, round1]
 
   function youLose() {
     informationalText.innerHTML =
-      '<img style="float: left; margin-right: 1rem;" class="monster-socks" alt="Socks." src="../assets/monsters/sock.svg" />' +
+      '<img style="float: left; margin-right: 1rem;" class="monster-socks" alt="Socks." src="../../assets/monsters/sock.svg" />' +
       '<h2>Ah! A pair of socks! <span aria-label="twenty three nineteen">2319<span>!</h2>' +
       '<button id="playAgainBtn">Play Again</button>';
     app.innerHTML = "";
@@ -199,7 +199,7 @@ tags: [project, round1]
     gridCell.innerHTML =
       '<img aria-live="polite" alt="' +
       monsters[id].alt +
-      '" src="../assets/monsters/' +
+      '" src="../../assets/monsters/' +
       monsters[id].image +
       '">';
   }
