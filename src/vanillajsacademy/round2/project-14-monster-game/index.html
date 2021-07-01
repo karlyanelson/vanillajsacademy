@@ -11,10 +11,6 @@ tags: [project, round2]
     width: 100%;
     height: 100%;
   }
-
-  .grid-cell button:disabled {
-    opacity: 0.25;
-  }
 </style>
 
 <main>
@@ -83,8 +79,6 @@ tags: [project, round2]
     },
   ];
 
-  const shuffledMonsters = shuffle(Array.from(monsters));
-
   let revealedMonsters = 0;
 
   // Methods
@@ -113,10 +107,13 @@ tags: [project, round2]
     return array;
   }
 
-  const monsterItem = ({ image, alt, sock }) => {
+  const monsterItem = ({ image, alt, sock }, index) => {
+    console.log("image", image);
+    console.log("monsters[index].image", monsters[index].image);
+    console.log("index", index);
     return `
     <li class="grid-cell" aria-live="polite">
-      <button data-monster-image="${image}" data-sock="${!!sock}">
+      <button data-monster="${index}">
         <img src="${assetPath}door.svg" alt="" />
         <span class="visually-hidden">Open the door</span>
       </button>
@@ -124,10 +121,13 @@ tags: [project, round2]
     `;
   };
 
-  const showMonsterGrid = (monsters) => {
+  const showMonsterGrid = () => {
+    shuffle(monsters);
+
     revealedMonsters = 0;
 
     app.innerHTML = `
+    <p>Click a door to reveal a monster. Try not to find a sock.</p>
     <ul class="grid monster-grid">
     ${monsters.map(monsterItem).join("")}
     </ul>
@@ -140,20 +140,21 @@ tags: [project, round2]
       return;
     }
 
-    if (btn.hasAttribute("data-monster-image")) {
+    if (btn.hasAttribute("data-monster")) {
       openDoor(btn);
     }
 
     if (event.target.matches("#retry")) {
-      showMonsterGrid(shuffledMonsters);
+      showMonsterGrid();
     }
   };
 
   const openDoor = (doorBtn) => {
-    const imageSrc = doorBtn.getAttribute("data-monster-image");
-    const sock = doorBtn.getAttribute("data-sock");
+    const monsterIndex = doorBtn.getAttribute("data-monster");
+    const imageSrc = monsters[monsterIndex].image;
+    const sock = monsters[monsterIndex].sock;
 
-    if (sock === "true") {
+    if (sock) {
       youLose();
     } else {
       let newImage = document.createElement("img");
@@ -188,7 +189,7 @@ tags: [project, round2]
   };
 
   // Init
-  showMonsterGrid(shuffledMonsters);
+  showMonsterGrid();
 
   document.addEventListener("click", onClickHandler);
 </script>
