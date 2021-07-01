@@ -85,6 +85,8 @@ tags: [project, round2]
 
   const shuffledMonsters = shuffle(Array.from(monsters));
 
+  let revealedMonsters = 0;
+
   // Methods
   /**
    * Randomly shuffle an array
@@ -123,6 +125,8 @@ tags: [project, round2]
   };
 
   const showMonsterGrid = (monsters) => {
+    revealedMonsters = 0;
+
     app.innerHTML = `
     <ul class="grid monster-grid">
     ${monsters.map(monsterItem).join("")}
@@ -130,43 +134,61 @@ tags: [project, round2]
     `;
   };
 
-  const openDoor = (event) => {
+  const onClickHandler = (event) => {
     const btn = event.target.closest("button");
-
-    if (!btn || !btn.hasAttribute("data-monster-image")) {
+    if (!btn) {
       return;
     }
 
-    const imageSrc = btn.getAttribute("data-monster-image");
-    const sock = btn.getAttribute("data-sock");
+    if (btn.hasAttribute("data-monster-image")) {
+      openDoor(btn);
+    }
 
-    let newImage = document.createElement("img");
-    newImage.src = assetPath + imageSrc;
-    newImage.alt =
-      sock === "true"
-        ? "Ah! A pair of socks! You lose."
-        : "Phew, it's just a monster.";
+    if (event.target.matches("#retry")) {
+      showMonsterGrid(shuffledMonsters);
+    }
+  };
 
-    btn.replaceWith(newImage);
+  const openDoor = (doorBtn) => {
+    const imageSrc = doorBtn.getAttribute("data-monster-image");
+    const sock = doorBtn.getAttribute("data-sock");
 
     if (sock === "true") {
       youLose();
+    } else {
+      let newImage = document.createElement("img");
+      newImage.src = assetPath + imageSrc;
+      newImage.alt = "Phew, it's just a monster.";
+
+      doorBtn.replaceWith(newImage);
+
+      revealedMonsters++;
+    }
+
+    if (revealedMonsters >= monsters.length - 1) {
+      youWin();
     }
   };
 
   const youLose = () => {
-    let elem = document.createElement("p");
-    elem.setAttribute("role", "alert");
-    elem.textContent =
-      "Sorry, you lost. Please refresh the page and try again.";
-    app.before(elem);
+    app.innerHTML = `
+      <img class="img-small" src="${assetPath}sock.svg" alt="Socks." />
+      <p role="alert">Ah! A pair of socks! You lose. You found ${revealedMonsters} out of ${
+      monsters.length - 1
+    } monsters.</p>
+      <button id="retry">Play Again</button>
+      `;
+  };
 
-    const buttons = document.querySelectorAll(".monster-grid button");
-    buttons.forEach((button) => (button.disabled = true));
+  const youWin = () => {
+    app.innerHTML = `
+      <p role="alert">You win! Congratulations, you found all the monsters.</p>
+      <button id="retry">Play Again</button>
+      `;
   };
 
   // Init
   showMonsterGrid(shuffledMonsters);
 
-  document.addEventListener("click", openDoor);
+  document.addEventListener("click", onClickHandler);
 </script>
