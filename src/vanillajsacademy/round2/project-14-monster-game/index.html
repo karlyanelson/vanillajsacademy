@@ -1,0 +1,172 @@
+---
+layout: layout_project.njk
+round: "2"
+number: "14"
+title: "Monster Game"
+tags: [project, round2]
+---
+
+<style>
+  .grid-cell button {
+    width: 100%;
+    height: 100%;
+  }
+
+  .grid-cell button:disabled {
+    opacity: 0.25;
+  }
+</style>
+
+<main>
+  <p class="project-metadata">Round {{round}} • Project {{number}}</p>
+  <h1 class="project-title">{{title}}</h1>
+
+  <div id="app">Loading monsters...</div>
+</main>
+
+<script>
+  //  Variables
+
+  const app = document.querySelector("#app");
+
+  const assetPath = "../../assets/monsters/";
+
+  const monsters = [
+    {
+      image: "monster1.svg",
+      alt: "Small, round, monster with no limbs.",
+    },
+    {
+      image: "monster2.svg",
+      alt: "Big monster with one big eye, long thin arms, and long thin legs.",
+    },
+    {
+      image: "monster3.svg",
+      alt: "Monster with a large, vertical mouth running through its body.",
+    },
+    {
+      image: "monster4.svg",
+      alt: "Monster with four arms and two horns.",
+    },
+    {
+      image: "monster5.svg",
+      alt: "Short monster with one big eye, a spiky head who looks sad.",
+    },
+    {
+      image: "monster6.svg",
+      alt: "Monster with one eye and a triangle body doing a handstand.",
+    },
+    {
+      image: "monster7.svg",
+      alt: "Cute monster with one big eye and tentacles for arms.",
+    },
+    {
+      image: "monster8.svg",
+      alt: "Monster with an egg-shaped body, no legs and one eye.",
+    },
+    {
+      image: "monster9.svg",
+      alt: "Monster that looks like a concerned ant.",
+    },
+    {
+      image: "monster10.svg",
+      alt: "Monster with no arms, a round body, eyes on stalks, and a magnificent mustache.",
+    },
+    {
+      image: "monster11.svg",
+      alt: "Monster with yeti energy and a big smile.",
+    },
+    {
+      sock: true,
+      image: "sock.svg",
+      alt: "Ah! A pair of socks! You lose.",
+    },
+  ];
+
+  const shuffledMonsters = shuffle(Array.from(monsters));
+
+  // Methods
+  /**
+   * Randomly shuffle an array
+   * https://stackoverflow.com/a/2450976/1293256
+   * @param  {Array} array The array to shuffle
+   * @return {String}      The first item in the shuffled array
+   */
+  function shuffle(array) {
+    let currentIndex = array.length;
+    let temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+  }
+
+  const monsterItem = ({ image, alt, sock }) => {
+    return `
+    <li class="grid-cell" aria-live="polite">
+      <button data-monster-image="${image}" data-sock="${!!sock}">
+        <img src="${assetPath}door.svg" alt="" />
+        <span class="visually-hidden">Open the door</span>
+      </button>
+    </li>
+    `;
+  };
+
+  const showMonsterGrid = (monsters) => {
+    app.innerHTML = `
+    <ul class="grid monster-grid">
+    ${monsters.map(monsterItem).join("")}
+    </ul>
+    `;
+  };
+
+  const openDoor = (event) => {
+    const btn = event.target.closest("button");
+
+    if (!btn || !btn.hasAttribute("data-monster-image")) {
+      return;
+    }
+
+    const imageSrc = btn.getAttribute("data-monster-image");
+    const sock = btn.getAttribute("data-sock");
+
+    let newImage = document.createElement("img");
+    newImage.src = assetPath + imageSrc;
+    newImage.alt =
+      sock === "true"
+        ? "Ah! A pair of socks! You lose."
+        : "Phew, it's just a monster.";
+
+    btn.replaceWith(newImage);
+
+    if (sock === "true") {
+      youLose();
+    }
+  };
+
+  const youLose = () => {
+    let elem = document.createElement("p");
+    elem.setAttribute("role", "alert");
+    elem.textContent =
+      "Sorry, you lost. Please refresh the page and try again.";
+    app.before(elem);
+
+    const buttons = document.querySelectorAll(".monster-grid button");
+    buttons.forEach((button) => (button.disabled = true));
+  };
+
+  // Init
+  showMonsterGrid(shuffledMonsters);
+
+  document.addEventListener("click", openDoor);
+</script>
