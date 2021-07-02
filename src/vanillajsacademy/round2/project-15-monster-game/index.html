@@ -15,7 +15,7 @@ tags: [project, round2]
 
 <main>
   <p class="project-metadata">Round {{round}} • Project {{number}}</p>
-  <h1 class="project-title">{{title}}</h1>
+  <h1 tabindex="-1" class="project-title">{{title}}</h1>
 
   <div id="app">Loading monsters...</div>
 </main>
@@ -123,7 +123,7 @@ tags: [project, round2]
     revealedMonsters = 0;
 
     app.innerHTML = `
-    <p tabindex="-1" id="directions">Click a door to reveal a monster. Try not to find a sock.</p>
+    <p id="directions">Click a door to reveal a monster. Try not to find a sock.</p>
     <ul class="grid monster-grid">
     ${monsters.map(monsterItem).join("")}
     </ul>
@@ -142,7 +142,7 @@ tags: [project, round2]
 
     if (event.target.matches("#retry")) {
       showMonsterGrid();
-      document.querySelector("#directions").focus();
+      document.querySelector("h1").focus();
     }
   };
 
