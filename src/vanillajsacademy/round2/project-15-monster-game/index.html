@@ -1,8 +1,8 @@
 ---
 layout: layout_project.njk
 round: "2"
-number: "14"
-title: "Monster Game"
+number: "15"
+title: "Monster Game - Keeping Score"
 tags: [project, round2]
 ---
 
@@ -85,7 +85,7 @@ tags: [project, round2]
    * Randomly shuffle an array
    * https://stackoverflow.com/a/2450976/1293256
    * @param  {Array} array The array to shuffle
-   * @return {String}      The first item in the shuffled array
+   * @return {Array}       The shuffled array
    */
   function shuffle(array) {
     let currentIndex = array.length;
@@ -123,7 +123,7 @@ tags: [project, round2]
     revealedMonsters = 0;
 
     app.innerHTML = `
-    <p>Click a door to reveal a monster. Try not to find a sock.</p>
+    <p tabindex="-1" id="directions">Click a door to reveal a monster. Try not to find a sock.</p>
     <ul class="grid monster-grid">
     ${monsters.map(monsterItem).join("")}
     </ul>
@@ -142,6 +142,7 @@ tags: [project, round2]
 
     if (event.target.matches("#retry")) {
       showMonsterGrid();
+      document.querySelector("#directions").focus();
     }
   };
 
