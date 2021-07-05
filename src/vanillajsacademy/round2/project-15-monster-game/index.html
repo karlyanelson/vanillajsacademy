@@ -18,6 +18,12 @@ tags: [project, round2]
   <h1 tabindex="-1" class="project-title">{{title}}</h1>
 
   <div id="app">Loading monsters...</div>
+  <div
+    id="announcements"
+    role="status"
+    class="visually-hidden"
+    aria-atomic="true"
+  ></div>
 </main>
 
 <script>
@@ -25,6 +31,7 @@ tags: [project, round2]
   const assetPath = "../../assets/monsters/";
 
   const app = document.querySelector("#app");
+  const announcements = document.querySelector("#announcements");
 
   const monsters = [
     {
@@ -108,10 +115,10 @@ tags: [project, round2]
 
   const monsterItem = ({ image, alt, sock }, index) => {
     return `
-    <li class="grid-cell" aria-live="polite">
+    <li class="grid-cell">
       <button data-monster="${index}">
         <img src="${assetPath}door.svg" alt="" />
-        <span class="visually-hidden">Open the door</span>
+        <span class="visually-hidden">Door ${index + 1}</span>
       </button>
     </li>
     `;
@@ -147,8 +154,9 @@ tags: [project, round2]
   };
 
   const openDoor = (doorBtn) => {
-    const monsterIndex = doorBtn.getAttribute("data-monster");
+    const monsterIndex = parseFloat(doorBtn.getAttribute("data-monster"));
     const monster = monsters[monsterIndex];
+    const monsterNumber = monsterIndex + 1;
     if (!monster) return;
     const imageSrc = monster.image;
     const sock = monster.sock;
@@ -158,9 +166,11 @@ tags: [project, round2]
     } else {
       let newImage = document.createElement("img");
       newImage.src = assetPath + imageSrc;
-      newImage.alt = "Phew, it's just a monster.";
+      newImage.alt = `Monster ${monsterNumber}: ${monster.alt}`;
 
       doorBtn.replaceWith(newImage);
+
+      announcements.textContent = `Phew, it's just a monster behind Door ${monsterNumber}.`;
 
       revealedMonsters++;
     }
@@ -171,6 +181,7 @@ tags: [project, round2]
   };
 
   const youLose = () => {
+    announcements.textContent = "";
     app.innerHTML = `
       <img class="img-small" src="${assetPath}sock.svg" alt="Socks." />
       <p role="alert">Ah! A pair of socks! You lose. You found ${revealedMonsters} out of ${
@@ -181,6 +192,7 @@ tags: [project, round2]
   };
 
   const youWin = () => {
+    announcements.textContent = "";
     app.innerHTML = `
       <p role="alert">You win! Congratulations, you found all the monsters.</p>
       <button id="retry">Play Again</button>
