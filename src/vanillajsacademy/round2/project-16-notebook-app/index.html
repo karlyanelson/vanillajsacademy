@@ -6,6 +6,16 @@ title: "Notebook App"
 tags: [project, round2]
 ---
 
+<style>
+  form {
+    margin-bottom: 1rem;
+  }
+
+  p[role="alert"] {
+    color: rgb(var(--color-success));
+  }
+</style>
+
 <main>
   <p class="project-metadata">Round {{round}} • Project {{number}}</p>
   <h1 tabindex="-1" class="project-title">{{title}}</h1>
@@ -20,8 +30,9 @@ tags: [project, round2]
 
 <script>
   //  Variables
+  const main = document.querySelector("main");
   const notebook = document.querySelector("#notebook");
-  const textarea = document.querySelector("textarea");
+  const note = document.querySelector("#note");
   const dataKey = "round2proj16";
 
   // Methods
@@ -29,7 +40,7 @@ tags: [project, round2]
     let notification = document.createElement("p");
     notification.setAttribute("role", "alert");
     notification.textContent = msg;
-    notebook.append(notification);
+    main.append(notification);
 
     // Remove it after 4 seconds
     setTimeout(function () {
@@ -40,8 +51,7 @@ tags: [project, round2]
   const saveNote = (e) => {
     e.preventDefault();
 
-    const data = textarea.value;
-    localStorage.setItem(dataKey, data);
+    localStorage.setItem(dataKey, note.value);
 
     announce("Your note was saved");
   };
@@ -49,7 +59,7 @@ tags: [project, round2]
   const loadSavedNote = () => {
     const data = localStorage.getItem(dataKey);
     if (!data) return;
-    textarea.value = data;
+    note.value = data;
   };
 
   // Init
