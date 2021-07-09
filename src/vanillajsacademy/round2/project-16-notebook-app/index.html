@@ -1,0 +1,59 @@
+---
+layout: layout_project.njk
+round: "2"
+number: "16"
+title: "Notebook App"
+tags: [project, round2]
+---
+
+<main>
+  <p class="project-metadata">Round {{round}} • Project {{number}}</p>
+  <h1 tabindex="-1" class="project-title">{{title}}</h1>
+
+  <form id="notebook">
+    <label for="note">Your note</label>
+    <textarea id="note"></textarea>
+
+    <button type="submit">Save Your Note</button>
+  </form>
+</main>
+
+<script>
+  //  Variables
+  const notebook = document.querySelector("#notebook");
+  const textarea = document.querySelector("textarea");
+  const dataKey = "round2proj16";
+
+  // Methods
+  const announce = (msg) => {
+    let notification = document.createElement("p");
+    notification.setAttribute("role", "alert");
+    notification.textContent = msg;
+    notebook.append(notification);
+
+    // Remove it after 4 seconds
+    setTimeout(function () {
+      notification.remove();
+    }, 4000);
+  };
+
+  const saveNote = (e) => {
+    e.preventDefault();
+
+    const data = textarea.value;
+    localStorage.setItem(dataKey, data);
+
+    announce("Your note was saved");
+  };
+
+  const loadSavedNote = () => {
+    const data = localStorage.getItem(dataKey);
+    if (!data) return;
+    textarea.value = data;
+  };
+
+  // Init
+  loadSavedNote();
+
+  notebook.addEventListener("submit", saveNote);
+</script>
