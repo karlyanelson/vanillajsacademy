@@ -1,7 +1,18 @@
 # vanillajsacademy
 
+## Install Dependencies
+
 ```
 npm install
+```
+
+## Run Locally
+
+### Not using a netlify function:
+
+If you're not using netlify functions, you can just run it this way:
+
+```
 npm run serve
 ```
 
@@ -11,7 +22,21 @@ serves at
 http://localhost:8080/vanillajsacademy/
 ```
 
-## Using Netlify Functions to make secure API calls
+### If using a netlify function:
+
+If you're using netlify functions, you need to run it like this:
+
+```
+netlify dev
+```
+
+serves at
+
+```
+http://localhost:8888/vanillajsacademy/
+```
+
+## How to use Netlify Functions to make secure API calls
 
 1. Install [Netlify CLI](https://docs.netlify.com/cli/get-started/#installation) globally so you can use [netlify-dev](https://github.com/netlify/cli/blob/master/docs/netlify-dev.md#netlify-functions)
 

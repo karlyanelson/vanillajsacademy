@@ -17,8 +17,7 @@ tags: [project, round1]
     const app = document.querySelector("#app");
 
     let locationAPI = "https://ipapi.co/json";
-    let weatherAPI =
-      "https://api.weatherbit.io/v2.0/current?key=e215256c477343769276979676022b66";
+    let weatherAPI = "/.netlify/functions/getweather?";
 
     /*!
      * Sanitize and encode all HTML in a user-submitted string
@@ -54,7 +53,7 @@ tags: [project, round1]
 
     function getWeatherData(location) {
       return fetch(
-        weatherAPI + "&" + "lat=" + location.lat + "&" + "lon=" + location.lon
+        weatherAPI + "lat=" + location.lat + "&" + "lon=" + location.lon
       );
     }
 

@@ -14,8 +14,38 @@ tags: [project, round2]
 </main>
 
 <script>
-  const showWeather = (weatherData) => {
-    console.log(weatherData);
+  const app = document.querySelector("#app");
+
+  /*!
+   * Sanitize and encode all HTML in a user-submitted string
+   * (c) 2018 Chris Ferdinandi, MIT License, https://gomakethings.com
+   * @param  {String} str  The user-submitted string
+   * @return {String} str  The sanitized string
+   */
+  function sanitizeHTML(str) {
+    var temp = document.createElement("div");
+    temp.textContent = str;
+    return temp.innerHTML;
+  }
+
+  const showWeather = ({
+    temp,
+    weather,
+    city_name,
+    state_code,
+    country_code,
+  }) => {
+    app.innerHTML = `
+      <h2>Current Weather </h2>
+      <img class="img-small" src="https://www.weatherbit.io/static/img/icons/${
+        weather.icon
+      }.png" alt="${sanitizeHTML(weather.description)}." />
+      <p>${sanitizeHTML(temp)}°F and ${sanitizeHTML(
+      weather.description
+    )} in ${sanitizeHTML(city_name)}, ${sanitizeHTML(
+      state_code
+    )} ${sanitizeHTML(country_code)}</p>
+    `;
   };
 
   const getWeatherData = async (position) => {
@@ -32,18 +62,20 @@ tags: [project, round2]
 
       if (!data) throw "No data";
 
+      console.log(data.data[0]);
+
       showWeather(data.data[0]);
     } catch (error) {
       console.warn(error);
     }
   };
 
-  const logError = (error) => {
+  const showError = (error) => {
     console.warn(error);
+    app.innerHTM =
+      "Sorry something went wrong. Please refresh the page and try again.";
   };
 
   // Request access to the user's location
-  navigator.geolocation.getCurrentPosition(getWeatherData, logError, {
-    enableHighAccuracy: true,
-  });
+  navigator.geolocation.getCurrentPosition(getWeatherData, showError);
 </script>
