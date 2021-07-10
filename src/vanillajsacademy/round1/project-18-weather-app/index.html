@@ -47,10 +47,6 @@ tags: [project, round1]
       return location;
     }
 
-    function cToF(temp) {
-      return (parseFloat(temp) * 9) / 5 + 32;
-    }
-
     function getWeatherData(location) {
       return fetch(
         weatherAPI + "lat=" + location.lat + "&" + "lon=" + location.lon
@@ -59,7 +55,6 @@ tags: [project, round1]
 
     function showWeather(weather) {
       const data = weather.data[0];
-      let temp = cToF(data.temp).toFixed(1);
       let icon = data.weather.icon;
 
       app.innerHTML =
@@ -68,7 +63,7 @@ tags: [project, round1]
         sanitizeHTML(icon) +
         ".png>" +
         "<p>It is currently " +
-        sanitizeHTML(temp) +
+        sanitizeHTML(data.temp) +
         " degrees Fahrenheight and " +
         sanitizeHTML(data.weather.description).toLowerCase() +
         " in " +
