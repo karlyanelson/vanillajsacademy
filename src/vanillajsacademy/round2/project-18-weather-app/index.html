@@ -51,7 +51,7 @@ tags: [project, round2]
   const getWeatherData = async (position) => {
     try {
       let response = await fetch(
-        `/.netlify/functions/getweather?lon=${position.coords.longitude}&lat=${position.coords.latitude}`
+        `/vanillajsacademy/.netlify/functions/getweather?lon=${position.coords.longitude}&lat=${position.coords.latitude}`
       );
 
       if (!response.ok) {
