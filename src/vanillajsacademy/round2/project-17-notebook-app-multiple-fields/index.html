@@ -35,9 +35,7 @@ tags: [project, round2]
   //  Variables
   const main = document.querySelector("main");
   const notebook = document.querySelector("#notebook");
-  const note = document.querySelector("#note");
-  const title = document.querySelector("#title");
-  const dataKey = "round2proj16";
+  const dataKey = "round2proj17";
 
   // Methods
   /*!
@@ -86,11 +84,21 @@ tags: [project, round2]
   };
 
   const loadSavedNote = () => {
-    const data = localStorage.getItem(dataKey);
-    if (!data) return;
-    const parsedData = JSON.parse(data);
-    note.value = parsedData.note || "";
-    title.value = parsedData.title || "";
+    const savedData = localStorage.getItem(dataKey);
+    if (!savedData) return;
+    const parsedData = JSON.parse(savedData);
+
+    // Get form elements
+    let fields = notebook.elements;
+
+    // Loop through each one and load data
+    for (let field of fields) {
+      // If there's no saved data, skip it
+      if (!parsedData[field.name]) continue;
+
+      // Set the field value to the saved data in localStorage
+      field.value = parsedData[field.name];
+    }
   };
 
   // Init
