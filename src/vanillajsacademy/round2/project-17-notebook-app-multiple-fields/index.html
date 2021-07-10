@@ -1,0 +1,100 @@
+---
+layout: layout_project.njk
+round: "2"
+number: "17"
+title: "Notebook App - Multiple Fields"
+tags: [project, round2]
+---
+
+<style>
+  form {
+    margin-bottom: 1rem;
+  }
+
+  p[role="alert"] {
+    color: rgb(var(--color-success));
+  }
+</style>
+
+<main>
+  <p class="project-metadata">Round {{round}} • Project {{number}}</p>
+  <h1 tabindex="-1" class="project-title">{{title}}</h1>
+
+  <form id="notebook">
+    <label for="title">Title</label>
+    <input type="text" id="title" name="title" />
+
+    <label for="note">Your note</label>
+    <textarea id="note" name="note"></textarea>
+
+    <button type="submit">Save Your Note</button>
+  </form>
+</main>
+
+<script>
+  //  Variables
+  const main = document.querySelector("main");
+  const notebook = document.querySelector("#notebook");
+  const note = document.querySelector("#note");
+  const title = document.querySelector("#title");
+  const dataKey = "round2proj16";
+
+  // Methods
+  /*!
+   * Serialize all form data into an object
+   * (c) 2021 Chris Ferdinandi, MIT License, https://gomakethings.com
+   * @param  {FormData} data The FormData object to serialize
+   * @return {String}        The serialized form data
+   */
+  function serialize(data) {
+    let obj = {};
+    for (let [key, value] of data) {
+      if (obj[key] !== undefined) {
+        if (!Array.isArray(obj[key])) {
+          obj[key] = [obj[key]];
+        }
+        obj[key].push(value);
+      } else {
+        obj[key] = value;
+      }
+    }
+    return obj;
+  }
+
+  const announce = (msg) => {
+    let notification = document.createElement("p");
+    notification.setAttribute("role", "alert");
+    notification.textContent = msg;
+    main.append(notification);
+
+    // Remove it after 4 seconds
+    setTimeout(function () {
+      notification.remove();
+    }, 4000);
+  };
+
+  const saveNote = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(notebook);
+
+    const data = serialize(formData);
+
+    localStorage.setItem(dataKey, JSON.stringify(data));
+
+    announce("Your note was saved");
+  };
+
+  const loadSavedNote = () => {
+    const data = localStorage.getItem(dataKey);
+    if (!data) return;
+    const parsedData = JSON.parse(data);
+    note.value = parsedData.note || "";
+    title.value = parsedData.title || "";
+  };
+
+  // Init
+  loadSavedNote();
+
+  notebook.addEventListener("submit", saveNote);
+</script>
