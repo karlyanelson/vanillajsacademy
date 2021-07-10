@@ -56,8 +56,6 @@ tags: [project, round2]
         `/.netlify/functions/getweather?lon=${position.coords.longitude}&lat=${position.coords.latitude}`
       );
 
-      // `http://api.weatherbit.io/v2.0/current?key=${WEATHER_BIT_KEY}&lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=I`;
-
       if (!response.ok) {
         throw "Response failed. Status: " + response.status;
       }
