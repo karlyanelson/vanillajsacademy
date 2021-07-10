@@ -1,0 +1,49 @@
+---
+layout: layout_project.njk
+round: "2"
+number: "18"
+title: "Weather App"
+tags: [project, round2]
+---
+
+<main>
+  <p class="project-metadata">Round {{round}} • Project {{number}}</p>
+  <h1 tabindex="-1" class="project-title">{{title}}</h1>
+
+  <div id="app">Checking the weather near you...</div>
+</main>
+
+<script>
+  const showWeather = (weatherData) => {
+    console.log(weatherData);
+  };
+
+  const getWeatherData = async (position) => {
+    try {
+      let response = await fetch(
+        `/.netlify/functions/getweather?lon=${position.coords.longitude}&lat=${position.coords.latitude}`
+      );
+
+      if (!response.ok) {
+        throw "Response failed. Status: " + response.status;
+      }
+
+      let data = await response.json();
+
+      if (!data) throw "No data";
+
+      showWeather(data.data[0]);
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
+  const logError = (error) => {
+    console.warn(error);
+  };
+
+  // Request access to the user's location
+  navigator.geolocation.getCurrentPosition(getWeatherData, logError, {
+    enableHighAccuracy: true,
+  });
+</script>
