@@ -14,12 +14,13 @@ tags: [project, round2]
 </main>
 
 <script>
-  const defaultOptions = {
-    unit: "I",
-    icon: true,
-  };
-
   const getWeather = (options) => {
+    const defaultOptions = {
+      unit: "M",
+      icon: false,
+      message: "{temperature} and {conditions} in {location}",
+    };
+
     const pluginOptions = {
       ...defaultOptions,
       ...options,
@@ -60,6 +61,31 @@ tags: [project, round2]
       state_code,
       country_code,
     }) => {
+      const showMessage = (message) => {
+        if (
+          !message.includes("{temperature}") ||
+          !message.includes("{conditions}") ||
+          !message.includes("{location}")
+        ) {
+          console.warn(
+            "Message must contain the strings '{temperature}', '{conditions}', or '{location}'"
+          );
+        }
+
+        return message
+          .replaceAll(
+            "{temperature}",
+            `${sanitizeHTML(temp)}°${getUnitText(pluginOptions.unit)}`
+          )
+          .replaceAll("{conditions}", sanitizeHTML(weather.description))
+          .replaceAll(
+            "{location}",
+            `${sanitizeHTML(city_name)}, ${sanitizeHTML(
+              state_code
+            )} ${sanitizeHTML(country_code)}`
+          );
+      };
+
       app.innerHTML = `
       <h2>Current Weather </h2>
       ${
@@ -71,11 +97,7 @@ tags: [project, round2]
           />`
           : ""
       }
-      <p>${sanitizeHTML(temp)}°${getUnitText(
-        pluginOptions.unit
-      )} and ${sanitizeHTML(weather.description)} in ${sanitizeHTML(
-        city_name
-      )}, ${sanitizeHTML(state_code)} ${sanitizeHTML(country_code)}</p>
+      <p>${showMessage(pluginOptions.message)}</p>
     `;
     };
 
@@ -111,5 +133,9 @@ tags: [project, round2]
     });
   };
 
-  getWeather({ icon: false, unit: "M" });
+  getWeather({
+    icon: true,
+    unit: "I",
+    message: "It is currently {temperature} and {conditions} in {location}",
+  });
 </script>
