@@ -16,8 +16,6 @@ tags: [project, round2]
 <script>
   const app = document.querySelector("#app");
 
-  const WEATHER_BIT_KEY = "";
-
   /*!
    * Sanitize and encode all HTML in a user-submitted string
    * (c) 2018 Chris Ferdinandi, MIT License, https://gomakethings.com
@@ -64,20 +62,20 @@ tags: [project, round2]
 
       if (!data) throw "No data";
 
-      console.log(data.data[0]);
-
       showWeather(data.data[0]);
     } catch (error) {
-      console.warn(error);
+      showError(error);
     }
   };
 
   const showError = (error) => {
     console.warn(error);
-    app.innerHTML =
+    app.textContent =
       "Sorry something went wrong. Please refresh the page and try again.";
   };
 
   // Request access to the user's location
-  navigator.geolocation.getCurrentPosition(getWeatherData, showError);
+  navigator.geolocation.getCurrentPosition(getWeatherData, showError, {
+    enableHighAccuracy: true,
+  });
 </script>
