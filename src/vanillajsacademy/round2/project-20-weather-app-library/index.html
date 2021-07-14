@@ -1,7 +1,7 @@
 ---
 layout: layout_project.njk
 round: "2"
-number: "19"
+number: "20"
 title: "Weather App Library"
 tags: [project, round2]
 ---
@@ -16,15 +16,12 @@ tags: [project, round2]
 <script>
   const getWeather = (options) => {
     const defaultOptions = {
-      unit: "I",
+      units: "I",
       icon: true,
       message: "{temperature} and {conditions} in {location}",
     };
 
-    const pluginOptions = {
-      ...defaultOptions,
-      ...options,
-    };
+    const { units, icon, message } = Object.assign(defaultOptions, options);
 
     const unitMap = {
       M: "C",
@@ -75,7 +72,7 @@ tags: [project, round2]
         return message
           .replaceAll(
             "{temperature}",
-            `${sanitizeHTML(temp)}°${getUnitText(pluginOptions.unit)}`
+            `${sanitizeHTML(temp)}°${getUnitText(units)}`
           )
           .replaceAll("{conditions}", sanitizeHTML(weather.description))
           .replaceAll(
@@ -89,22 +86,24 @@ tags: [project, round2]
       app.innerHTML = `
       <h2>Current Weather </h2>
       ${
-        pluginOptions.icon
+        icon
           ? `<img
             class="img-small"
-            src="https://www.weatherbit.io/static/img/icons/${weather.icon}.png"
+            src="https://www.weatherbit.io/static/img/icons/${sanitizeHTML(
+              weather.icon
+            )}.png"
             alt="${sanitizeHTML(weather.description)}."
           />`
           : ""
       }
-      <p>${showMessage(pluginOptions.message)}</p>
+      <p>${showMessage(message)}</p>
     `;
     };
 
     const getWeatherData = async (position) => {
       try {
         let response = await fetch(
-          `/.netlify/functions/getweather?lon=${position.coords.longitude}&lat=${position.coords.latitude}&units=${pluginOptions.unit}`
+          `/.netlify/functions/getweather?lon=${position.coords.longitude}&lat=${position.coords.latitude}&units=${units}`
         );
 
         if (!response.ok) {
@@ -135,7 +134,7 @@ tags: [project, round2]
 
   getWeather({
     icon: true,
-    unit: "I",
-    message: "It is currently {temperature} and {conditions} in {location}",
+    units: "I",
+    message: "{conditions} and {temperature} in {location}",
   });
 </script>
