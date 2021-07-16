@@ -1,0 +1,83 @@
+---
+layout: layout_project.njk
+round: "2"
+number: "21"
+title: "Date helper function"
+tags: [project, round2]
+---
+
+<main>
+  <p class="project-metadata">Round {{round}} • Project {{number}}</p>
+  <h1 tabindex="-1" class="project-title">{{title}}</h1>
+
+  <p id="app">Getting date...</p>
+</main>
+
+<script>
+  const app = document.querySelector("#app");
+
+  /**
+   * Get a date in the future (or past) from a timestamp
+   * @return {String} A formatted date string
+   */
+  const getFutureDate = (options) => {
+    const defaultOptions = {
+      timestamp: new Date().getTime(),
+      units: "days",
+      numberOfUnits: 0,
+      format: {
+        dateStyle: "long",
+        timeStyle: "short",
+        hour12: true,
+      },
+    };
+
+    const { timestamp, units, numberOfUnits, format } = Object.assign(
+      defaultOptions,
+      options
+    );
+
+    const hours = 1000 * 60 * 60;
+    const days = hours * 24;
+    const weeks = days * 7;
+    const months = weeks * 30;
+    const years = days * 365;
+
+    const unitMap = {
+      hours,
+      days,
+      weeks,
+      months,
+      years,
+    };
+
+    if (!unitMap[units]) {
+      throw new Error(
+        "Invalid units passed in. Units string must be either 'hours', 'days', 'weeks', 'months', or 'years'."
+      );
+    }
+
+    const dateToFormat = new Date(timestamp + numberOfUnits * unitMap[units]);
+
+    const formattedDate = dateToFormat.toLocaleString(
+      navigator.language,
+      format
+    );
+
+    return formattedDate;
+  };
+
+  app.textContent =
+    5 +
+    " days" +
+    " from now is: " +
+    getFutureDate({
+      numberOfUnits: 5,
+      units: "days",
+      format: {
+        dateStyle: "full",
+        timeStyle: "full",
+        hour12: true,
+      },
+    });
+</script>
