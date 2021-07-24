@@ -53,7 +53,7 @@ tags: [project, round2]
 
     if (!unitMap[units]) {
       throw new Error(
-        "Invalid units passed in. Units string must be either 'hours', 'days', 'weeks', 'months', or 'years'."
+        `"${units}" is not a valid unit of time. Units string must be either 'hours', 'days', 'weeks', 'months', or 'years'.`
       );
     }
 

@@ -1,0 +1,128 @@
+---
+layout: layout_project.njk
+round: "2"
+number: "22"
+title: "Timestamp utility library"
+tags: [project, round2]
+---
+
+<main>
+  <p class="project-metadata">Round {{round}} • Project {{number}}</p>
+  <h1 tabindex="-1" class="project-title">{{title}}</h1>
+
+  <p id="app">Getting date...</p>
+</main>
+
+<script>
+  const app = document.querySelector("#app");
+
+  let stamp = (function () {
+    const now = new Date().getTime();
+
+    const getFutureTimestamp = (options) => {
+      const defaultOptions = {
+        timestamp: now,
+        units: "days",
+        numberOfUnits: 0,
+      };
+
+      const { timestamp, units, numberOfUnits, format } = Object.assign(
+        defaultOptions,
+        options
+      );
+
+      const hours = 1000 * 60 * 60;
+      const days = hours * 24;
+      const weeks = days * 7;
+      const months = days * 30;
+      const years = days * 365;
+
+      const unitMap = {
+        hours,
+        days,
+        weeks,
+        months,
+        years,
+      };
+
+      if (!unitMap[units]) {
+        throw new Error(
+          `"${units}" is not a valid unit of time. Units string must be either 'hours', 'days', 'weeks', 'months', or 'years'.`
+        );
+      }
+
+      return timestamp + numberOfUnits * unitMap[units];
+    };
+
+    const addHours = (timestamp, amount) => {
+      const start = timestamp || now;
+      return getFutureTimestamp({
+        timestamp: start,
+        units: "hours",
+        numberOfUnits: amount || 0,
+      });
+    };
+
+    const addDays = (timestamp, amount) => {
+      const start = timestamp || now;
+      return getFutureTimestamp({
+        timestamp: start,
+        units: "days",
+        numberOfUnits: amount || 0,
+      });
+    };
+
+    const addWeeks = (timestamp, amount) => {
+      const start = timestamp || now;
+      return getFutureTimestamp({
+        timestamp: start,
+        units: "weeks",
+        numberOfUnits: amount || 0,
+      });
+    };
+
+    const addMonths = (timestamp, amount) => {
+      const start = timestamp || now;
+      return getFutureTimestamp({
+        timestamp: start,
+        units: "months",
+        numberOfUnits: amount || 0,
+      });
+    };
+
+    const addYears = (timestamp, amount) => {
+      const start = timestamp || now;
+      return getFutureTimestamp({
+        timestamp: start,
+        units: "years",
+        numberOfUnits: amount || 0,
+      });
+    };
+
+    const getDate = (timestamp) => {
+      const dateToFormat = timestamp ? new Date(timestamp) : new Date();
+
+      console.log(dateToFormat);
+
+      return dateToFormat.toLocaleString(navigator.language, {
+        dateStyle: "long",
+        timeStyle: "short",
+        hour12: true,
+      });
+    };
+
+    // Export public methods
+    return { addHours, addDays, addWeeks, addMonths, addYears, getDate };
+  })();
+
+  // Get a timestamp for right now
+  let now = new Date().getTime();
+
+  // Add three weeks
+  let threeWeeks = stamp.addWeeks(now, 3);
+
+  // Get a formatted date
+  let date = stamp.getDate(threeWeeks);
+
+  app.textContent = date;
+</script>
