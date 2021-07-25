@@ -1,0 +1,86 @@
+---
+layout: layout_project.njk
+round: "2"
+number: "23"
+title: "Timestamp constructor library"
+tags: [project, round2]
+---
+
+<main>
+  <p class="project-metadata">Round {{round}} • Project {{number}}</p>
+  <h1 tabindex="-1" class="project-title">{{title}}</h1>
+
+  <p id="app">Getting date...</p>
+</main>
+
+<script>
+  const app = document.querySelector("#app");
+
+  const Stamp = (function () {
+    function Constructor(timestamp) {
+      this.timestamp = timestamp || new Date().getTime();
+    }
+
+    const hours = 1000 * 60 * 60;
+    const days = hours * 24;
+    const weeks = days * 7;
+    const months = days * 30;
+    const years = days * 365;
+
+    const units = {
+      hours,
+      days,
+      weeks,
+      months,
+      years,
+    };
+
+    Constructor.prototype.addHours = function (amount = 0) {
+      return this.timestamp + amount * units.hours;
+    };
+
+    Constructor.prototype.addDays = function (amount = 0) {
+      return this.timestamp + amount * units.days;
+    };
+
+    Constructor.prototype.addWeeks = function (amount = 0) {
+      return this.timestamp + amount * units.weeks;
+    };
+
+    Constructor.prototype.addMonths = function (amount = 0) {
+      return this.timestamp + amount * units.months;
+    };
+
+    Constructor.prototype.addYears = function (amount = 0) {
+      return this.timestamp + amount * units.years;
+    };
+
+    Constructor.prototype.getDate = function (options = {}) {
+      const dateToFormat = new Date(this.timestamp);
+
+      const format = Object.assign(
+        {
+          dateStyle: "long",
+          timeStyle: "short",
+          hour12: true,
+        },
+        options
+      );
+
+      return dateToFormat.toLocaleString(navigator.language, format);
+    };
+
+    // Export public methods
+    return Constructor;
+  })();
+
+  const now = new Stamp();
+
+  // Add three weeks
+  const threeWeeks = now.addWeeks(3);
+
+  // Get a formatted date
+  const date = new Stamp(threeWeeks).getDate();
+
+  app.textContent = "Three weeks from now is: " + date;
+</script>

@@ -16,7 +16,7 @@ tags: [project, round2]
 <script>
   const app = document.querySelector("#app");
 
-  let stamp = (function () {
+  const stamp = (function () {
     const now = new Date().getTime();
 
     const getFutureTimestamp = (options) => {
@@ -26,7 +26,7 @@ tags: [project, round2]
         numberOfUnits: 0,
       };
 
-      const { timestamp, units, numberOfUnits, format } = Object.assign(
+      const { timestamp, units, numberOfUnits } = Object.assign(
         defaultOptions,
         options
       );
@@ -99,16 +99,19 @@ tags: [project, round2]
       });
     };
 
-    const getDate = (timestamp) => {
+    const getDate = (timestamp, options = {}) => {
       const dateToFormat = timestamp ? new Date(timestamp) : new Date();
 
-      console.log(dateToFormat);
+      const format = Object.assign(
+        {
+          dateStyle: "long",
+          timeStyle: "short",
+          hour12: true,
+        },
+        options
+      );
 
-      return dateToFormat.toLocaleString(navigator.language, {
-        dateStyle: "long",
-        timeStyle: "short",
-        hour12: true,
-      });
+      return dateToFormat.toLocaleString(navigator.language, format);
     };
 
     // Export public methods
@@ -124,5 +127,5 @@ tags: [project, round2]
   // Get a formatted date
   let date = stamp.getDate(threeWeeks);
 
-  app.textContent = date;
+  app.textContent = "Three weeks from now is: " + date;
 </script>
