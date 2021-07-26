@@ -1,0 +1,98 @@
+---
+layout: layout_project.njk
+round: "2"
+number: "25"
+title: "Timestamp - Read-only properties"
+tags: [project, round2]
+---
+
+<main>
+  <p class="project-metadata">Round {{round}} • Project {{number}}</p>
+  <h1 tabindex="-1" class="project-title">{{title}}</h1>
+
+  <p id="app">Getting date...</p>
+</main>
+
+<script>
+  const app = document.querySelector("#app");
+
+  const Stamp = (function () {
+    function Constructor(timestamp) {
+      Object.defineProperties(this, {
+        timestamp: { value: timestamp || new Date().getTime() },
+      });
+    }
+
+    const hours = 1000 * 60 * 60;
+    const days = hours * 24;
+    const weeks = days * 7;
+    const months = days * 30;
+    const years = days * 365;
+
+    const units = {
+      hours,
+      days,
+      weeks,
+      months,
+      years,
+    };
+
+    Constructor.prototype.addHours = function (amount = 0) {
+      return new Constructor(this.timestamp + amount * units.hours);
+    };
+
+    Constructor.prototype.addDays = function (amount = 0) {
+      return new Constructor(this.timestamp + amount * units.days);
+    };
+
+    Constructor.prototype.addWeeks = function (amount = 0) {
+      return new Constructor(this.timestamp + amount * units.weeks);
+    };
+
+    Constructor.prototype.addMonths = function (amount = 0) {
+      return new Constructor(this.timestamp + amount * units.months);
+    };
+
+    Constructor.prototype.addYears = function (amount = 0) {
+      return new Constructor(this.timestamp + amount * units.years);
+    };
+
+    Constructor.prototype.getDate = function (options = {}) {
+      const dateToFormat = new Date(this.timestamp);
+
+      const format = Object.assign(
+        {
+          dateStyle: "long",
+          timeStyle: "short",
+          hour12: true,
+        },
+        options
+      );
+
+      return dateToFormat.toLocaleString(navigator.language, format);
+    };
+
+    // Export public methods
+    return Constructor;
+  })();
+
+  const now = new Stamp();
+  const date = now
+    .addYears(1)
+    .addMonths(2)
+    .addWeeks(3)
+    .addDays(4)
+    .addHours(-5)
+    .getDate();
+
+  app.textContent =
+    "1 year + 2 months + 3 weeks + 4 days - 5 hours from now is: " + date;
+
+  // Add 2 weeks and 1 day, then get the timestamp
+  let twoWeeksAndOneDay = now.addWeeks(2).addDays().timestamp;
+  console.log("now", now.timestamp);
+  now.timestamp = 1234;
+  console.log("tried to change now's timestamp ", now.timestamp);
+
+  console.log("twoWeeksAndOneDay", twoWeeksAndOneDay);
+</script>
