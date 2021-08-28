@@ -1,0 +1,76 @@
+---
+layout: layout_project.njk
+round: "2"
+number: "26"
+title: "Dice Library"
+tags: [project, round2]
+---
+
+<main>
+  <p class="project-metadata">Round {{round}} • Project {{number}}</p>
+  <h1 class="project-title">{{title}}</h1>
+
+  <p>
+    <button id="dice">Roll a D6</button>
+  </p>
+
+  <div id="result" aria-live="polite"></div>
+</main>
+
+<script>
+  const Dice = (function () {
+    /**
+     * The constructor object
+     */
+    function Constructor(btnSelector, resultSelector) {
+      // Get the element
+      let btn = document.querySelector(btnSelector);
+      let result = document.querySelector(resultSelector);
+
+      // Make sure elements exist
+      if (!btn || !result) throw "Dice and result elements must be provided.";
+
+      createEventListener(btn, result);
+    }
+
+    let sides = [1, 2, 3, 4, 5, 6];
+
+    /**
+     * Randomly shuffle an array
+     * https://stackoverflow.com/a/2450976/1293256
+     * @param  {Array} array The array to shuffle
+     * @return {String}      The first item in the shuffled array
+     */
+    function shuffle(array) {
+      let currentIndex = array.length;
+      let temporaryValue, randomIndex;
+
+      // While there remain elements to shuffle...
+      while (0 !== currentIndex) {
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+
+      return array;
+    }
+
+    function createEventListener(btn, result) {
+      function roll() {
+        shuffle(sides);
+        result.textContent = `You rolled a ${sides[0]}`;
+      }
+
+      btn.addEventListener("click", roll);
+    }
+
+    return Constructor;
+  })();
+
+  let d6 = new Dice("#dice", "#result");
+</script>
