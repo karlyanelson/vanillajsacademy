@@ -1,0 +1,112 @@
+---
+layout: layout_project.njk
+round: "2"
+number: "28"
+title: "Dice Library - Public Methods"
+tags: [project, round2]
+---
+
+<main>
+  <p class="project-metadata">Round {{round}} • Project {{number}}</p>
+  <h1 class="project-title">{{title}}</h1>
+
+  <p>
+    <button id="d6">Roll a D6</button>
+    <button id="d20">Roll a D20</button>
+  </p>
+
+  <div id="result" aria-live="polite"></div>
+</main>
+
+<script>
+  const Dice = (function () {
+    const defaultOptions = {
+      sides: 6,
+      message: `You rolled a [[roll]].`,
+    };
+
+    function Constructor(btnSelector, resultSelector, options = {}) {
+      let btn = document.querySelector(btnSelector);
+      let result = document.querySelector(resultSelector);
+
+      if (!btn || !result) throw "Dice and result elements must be provided.";
+
+      let settings = Object.assign({}, defaultOptions, options);
+
+      let sides = Array.from(new Array(settings.sides)).map(function (
+        item,
+        index
+      ) {
+        return index;
+      });
+
+      Object.freeze(settings);
+
+      createEventListener(btn, result, this);
+
+      Constructor.prototype.roll = function () {
+        rollDice(this, result);
+      };
+
+      Object.defineProperties(this, {
+        _message: { value: settings.message },
+        _sides: { value: sides },
+      });
+    }
+
+    /**
+     * Randomly shuffle an array
+     * https://stackoverflow.com/a/2450976/1293256
+     * @param  {Array} array The array to shuffle
+     * @return {String}      The first item in the shuffled array
+     */
+    function shuffle(array) {
+      let currentIndex = array.length;
+      let temporaryValue, randomIndex;
+
+      // While there remain elements to shuffle...
+      while (0 !== currentIndex) {
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+
+      return array;
+    }
+
+    function rollDice(instance, result) {
+      shuffle(instance._sides);
+
+      if (!instance._message.includes("[[roll]]")) {
+        throw new Error(
+          "Message must include [[roll]] to indicate where the number of the roll should go in the sentence."
+        );
+      }
+      result.textContent = instance._message.replace(
+        "[[roll]]",
+        instance._sides[0]
+      );
+    }
+
+    function createEventListener(btn, result, instance) {
+      function roll() {
+        rollDice(instance, result);
+      }
+
+      btn.addEventListener("click", roll);
+    }
+
+    return Constructor;
+  })();
+
+  let d20 = new Dice("#d20", "#result", {
+    sides: 20,
+  });
+
+  d20.roll();
+</script>
