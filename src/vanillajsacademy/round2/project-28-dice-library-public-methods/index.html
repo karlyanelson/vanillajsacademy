@@ -45,7 +45,14 @@ tags: [project, round2]
       createEventListener(btn, result, this);
 
       Constructor.prototype.roll = function () {
-        rollDice(this, result);
+        shuffle(this._sides);
+
+        if (!this._message.includes("[[roll]]")) {
+          throw new Error(
+            "Message must include [[roll]] to indicate where the number of the roll should go in the sentence."
+          );
+        }
+        result.textContent = this._message.replace("[[roll]]", this._sides[0]);
       };
 
       Object.defineProperties(this, {
@@ -79,23 +86,9 @@ tags: [project, round2]
       return array;
     }
 
-    function rollDice(instance, result) {
-      shuffle(instance._sides);
-
-      if (!instance._message.includes("[[roll]]")) {
-        throw new Error(
-          "Message must include [[roll]] to indicate where the number of the roll should go in the sentence."
-        );
-      }
-      result.textContent = instance._message.replace(
-        "[[roll]]",
-        instance._sides[0]
-      );
-    }
-
     function createEventListener(btn, result, instance) {
       function roll() {
-        rollDice(instance, result);
+        instance.roll();
       }
 
       btn.addEventListener("click", roll);
