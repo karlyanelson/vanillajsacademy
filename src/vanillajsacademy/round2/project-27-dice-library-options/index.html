@@ -22,7 +22,7 @@ tags: [project, round2]
   const Dice = (function () {
     const defaultOptions = {
       sides: 6,
-      // message: `You rolled a {{roll}}.`,
+      message: `You rolled a [[roll]].`,
     };
 
     function Constructor(btnSelector, resultSelector, options = {}) {
@@ -79,12 +79,15 @@ tags: [project, round2]
       function roll() {
         shuffle(instance._sides);
 
-        // result.textContent = instance._message.replace(
-        //   "{{roll}}",
-        //   instance._sides[0]
-        // );
-
-        result.textContent = `You rolled a ${instance._sides[0]}`;
+        if (!instance._message.includes("[[roll]]")) {
+          throw new Error(
+            "Message must include [[roll]] to indicate where the number of the roll should go in the sentence."
+          );
+        }
+        result.textContent = instance._message.replace(
+          "[[roll]]",
+          instance._sides[0]
+        );
       }
 
       btn.addEventListener("click", roll);
@@ -94,5 +97,8 @@ tags: [project, round2]
   })();
 
   let d6 = new Dice("#d6", "#result");
-  let d20 = new Dice("#d20", "#result", { sides: 20 });
+  let d20 = new Dice("#d20", "#result", {
+    sides: 20,
+    message: "[[roll]] was rolled",
+  });
 </script>
