@@ -1,8 +1,8 @@
 ---
 layout: layout_project.njk
 round: "2"
-number: "29"
-title: "Dice Library - Destroy"
+number: "30"
+title: "Dice Library - Callbacks or Custom Events"
 tags: [project, round2]
 ---
 
@@ -12,10 +12,11 @@ tags: [project, round2]
 
   <p>
     <button id="d6">Roll a D6</button>
-    <button id="d20" disabled>Roll a D20</button>
+    <button id="d20">Roll a D20</button>
   </p>
 
   <div id="result" aria-live="polite"></div>
+  <em id="difference"></em>
 </main>
 
 <script>
@@ -23,6 +24,8 @@ tags: [project, round2]
     const defaultOptions = {
       sides: 6,
       message: `You rolled a [[roll]].`,
+      beforeRoll: function () {},
+      afterRoll: function () {},
     };
 
     function Constructor(btnSelector, resultSelector, options = {}) {
@@ -45,6 +48,16 @@ tags: [project, round2]
       const listener = createEventListener(btn, result, this);
 
       Constructor.prototype.roll = function () {
+        // Emit custom event
+        let canceled = !emitEvent("dice:before-roll", {
+          previousRoll: this._sides[0],
+        });
+
+        // If the event was canceled, end
+        if (canceled) return;
+
+        this._beforeRoll();
+
         shuffle(this._sides);
 
         if (!this._message.includes("[[roll]]")) {
@@ -56,6 +69,12 @@ tags: [project, round2]
           "[[roll]]",
           this._sides[0]
         );
+
+        emitEvent("dice:after-roll", {
+          newRoll: this._sides[0],
+        });
+
+        this._afterRoll();
       };
 
       Constructor.prototype.destroy = function () {
@@ -70,7 +89,40 @@ tags: [project, round2]
         _message: { value: settings.message },
         _sides: { value: sides },
         _listener: { value: listener },
+        _beforeRoll: { value: settings.beforeRoll },
+        _afterRoll: { value: settings.afterRoll },
       });
+    }
+
+    function createEventListener(btn, result, instance) {
+      function roll() {
+        instance.roll();
+      }
+
+      btn.addEventListener("click", roll);
+
+      return roll;
+    }
+
+    /**
+     * Emit a custom event
+     * @param  {String} type   The event type
+     * @param  {Object} detail Any details to pass along with the event
+     * @param  {Node}   elem   The element to attach the event to
+     */
+    function emitEvent(type, detail = {}, elem = document) {
+      // Make sure there's an event type
+      if (!type) return;
+
+      // Create a new event
+      let event = new CustomEvent(type, {
+        bubbles: true,
+        cancelable: true,
+        detail: detail,
+      });
+
+      // Dispatch the event
+      return elem.dispatchEvent(event);
     }
 
     /**
@@ -98,29 +150,57 @@ tags: [project, round2]
       return array;
     }
 
-    function createEventListener(btn, result, instance) {
-      function roll() {
-        instance.roll();
-      }
-
-      btn.addEventListener("click", roll);
-
-      return roll;
-    }
-
     return Constructor;
   })();
+
   let d6 = new Dice("#d6", "#result", {
     sides: 6,
+    beforeRoll: () => {
+      console.log("before");
+    },
+    afterRoll: () => {
+      console.log("after");
+      showDifference("d6");
+    },
   });
 
   let d20 = new Dice("#d20", "#result", {
     sides: 20,
+    afterRoll: () => {
+      showDifference("d20");
+    },
   });
 
-  // Destroy the current instance
-  d20.destroy();
+  let previousRoll;
+  let newRoll;
+  const differenceText = document.querySelector("#difference");
 
-  // Nothing should happen
-  d20.roll();
+  document.addEventListener("dice:before-roll", (e) => {
+    if (previousRoll === undefined) {
+      return;
+    }
+    previousRoll = e.detail.previousRoll;
+  });
+
+  document.addEventListener("dice:after-roll", (e) => {
+    newRoll = e.detail.newRoll;
+    console.log(newRoll);
+  });
+
+  const showDifference = (diceType) => {
+    if (previousRoll === undefined) {
+      differenceText.textContent = "";
+      previousRoll = newRoll;
+      return;
+    }
+    let difference = newRoll - previousRoll;
+
+    if (typeof difference === "number") {
+      differenceText.textContent = `Difference from previous roll of ${diceType}: ${
+        difference >= 0 ? `+${difference}` : difference
+      }`;
+    } else {
+      differenceText.textContent = "";
+    }
+  };
 </script>
