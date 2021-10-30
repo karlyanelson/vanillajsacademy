@@ -17,6 +17,73 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
+        
         {{ content | safe }}
+
+        <fieldset id="modeSwitcher" class="mode-switcher">
+            <legend>Mode</legend>
+            
+            <label for="darkOff">
+                <input id="darkOff" name="darkmode" type="radio" data-theme="light" checked />
+                <span>Light</span>
+            </label>
+
+            
+            <label for="darkOn">
+                <input id="darkOn" name="darkmode" type="radio" data-theme="dark" />
+                <span>Dark</span>
+            </label>
+        </fieldset>
     </body>
+
+    <script>
+        const modeSwitcher = document.querySelector("#modeSwitcher");
+        const lightMode = document.querySelector("#darkOff");
+        const darkMode = document.querySelector("#darkOn");
+        const id = 'VJSAcademy';
+
+        function enableDarkMode() {
+            darkMode.checked = true;
+            document.body.classList = 'dark';
+            console.log('enable dark mode');
+        }
+
+        function enableLightMode() {
+            lightMode.checked = true;
+            document.body.classList = 'light';
+            console.log('enable light mode')
+        }
+
+
+        let systemModeSetting = window.matchMedia('(prefers-color-scheme: dark)');
+
+        function setModeToMatchSystem(e) {
+            if (e.matches) {
+                enableDarkMode()
+            } else {
+                enableLightMode()
+            }
+        }
+
+        setModeToMatchSystem(systemModeSetting);
+        systemModeSetting.addListener(setModeToMatchSystem);
+
+        const savedMode = localStorage.getItem(id);
+
+        if (savedMode === 'dark') {
+           enableDarkMode()
+        } else {
+            enableLightMode()
+        }
+
+        modeSwitcher.addEventListener('change', updateMode)
+
+        function updateMode(e) {
+            if(e.target.checked && e.target.hasAttribute('data-theme')){
+                document.body.classList = (e.target.getAttribute('data-theme'));
+                localStorage.setItem(id, e.target.getAttribute('data-theme'))
+            } 
+        }
+
+    </script>
 </html>
