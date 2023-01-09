@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/karlyanelson/vanillajsacademy#readme",
   "devDependencies": {
-    "@11ty/eleventy": "^0.11.0",
+    "@11ty/eleventy": "^1.0.2",
     "clean-css": "^4.2.3"
   },
   "dependencies": {
